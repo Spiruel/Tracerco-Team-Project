@@ -1,0 +1,145 @@
+\section{Introduction}
+
+An anomaly is defined as a data point that deviates from the expectation of a system.
+
+The detection of anomalies is crucial both in data cleaning processes, and also in the detection of any upcoming issues when monitoring live data \cite{Akouemo2016948}. This has many important real world applications, including those in cyber-security and finance in detecting fraudulent behaviours automatically. Anomaly detection works under the assumption that a dataset will contain a large number of `normal' points and a few `abnormal' points, taken as the anomalies \cite{Pimentel2014215}. In the scope of this project, anomalies will be produced by unusual behaviour from the motor: caused by issues such as overheating, components beginning to break, or overloading the motor and applying more stress than it can take. 
+
+Anomaly detection has a wide range of real world applications, all of which are crucial when finding issues with equipment in real time or suspicious behaviour in certain data types. This was first introduced in 1987 for Intrusion Detection Systems (IDS) by Denning for online security, which worked on the assumption that the exploitation of a system's weaknesses would involve abnormal behaviour \cite{1702202}. Since this initial application, the use of anomaly detection in cyber-security has become standard, and is crucial for uses such as detecting fraudulent credit card transactions or suspicious online traffic patterns. Anomaly detection has uses in the medical field: Computer Aided Diagnosis (CAD) is used alongside professionals to improve the rates of false positives or undetected anomalies. An anomaly in a mammogram could be an indication of a tumour for example \cite{Sajda2003AMP}. Spacecraft can be monitored using anomaly detection methods to ensure that any failures in equipment are detected early, when the spacecraft is in use and cannot be observed in person \cite{Fujimaki:2005:ASA:1081870.1081917}. Clearly, anomaly detection is a wide ranging field, which has a number of applications in different areas, most of which are extremely important and lead to actionable results.
+
+There are five distinct ways in which this anomaly detection can be carried out: probabilistic, distance-based, reconstruction-based, domain-based and information-theoretic based \cite{Pimentel2014215}. The probabilistic approach will estimate the characteristics of a dataset based on the density of points in a `normal' set and compare data to this set to determine which points are anomalous based on the probability of a point being in that position. The reconstruction-based approach assumes that `normal' data will be tightly clustered, and anomalous points will be a distance from these points. Clustering analysis or nearest neighbour analysis is then used to determine whether or not a point is anomalous. Reconstruction-based analysis involves using a training set of data and mapping data using the model that has been created. A large difference between the model and the observed data will result in a high anomaly score, and hence the point will be deemed anomalous. The domain-based approach produces a boundary surrounding the `normal' data, and determines that any point outside of this is anomalous. Finally, using the information-theoretic approach, measures such as entropy are calculated, and it is assumed that anomalous data will significantly change the value of this. A combination of methods will be used to determine where anomalies are found in order to improve the reliability of detecting anomalous points and minimise the chance of false positives.
+
+- real world uses
+- first historical 'mentions' of anomalies
+- methods of finding anomalies
+
+observation in a temporal signal that is statistically unlikely
+given the generative distribution
+
+modern world - loads of data collected with IoT all the time. Loads of data to sift through!
+
+Anomaly detection was introduced in 1987 and has been intensively researched but it is still not popular comparing with signature one. So what prevents security vendors applying anomaly in their products? machine learning anomaly detection as a better alternative or a necessary accompaniment to signature-based security approaches. We have seen more and more companies adopt this approach and expect to see that trend growing.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+\iffalse
+What is an anomaly? An \emph{anomaly} is an element whose properties differ from the majority of other elements under consideration which are called the \emph{normal} data. {Chandola2009}{\emph{Anomaly detection} refers to the problem of finding patterns in data that do not conform to expected behavior. These non-conforming patterns are often referred to as \emph{anomalies} \textelp{}}.
+
+    \begin{figure}[tb]
+    	\centering
+    	\includegraphics{expose_synthetic_contour.pdf}
+    	\caption{Sketch of the EXPoSE scores $\eta(z)$ in $Real^2$, given some samples (black dots).}
+    	\label{fig:expose_synthetic_contour}
+    \end{figure}
+    
+Typical applications of anomaly detection are network intrusion detection, credit card fraud detection, medical diagnosis and failure detection in industrial environments.
+%
+For example, systems which detect \emph{unusual} network behavior can be used to complement or replace traditional intrusion detection methods which are based on experts' knowledge in order to defeat the increasing number of attacks on computer based networks {Kumar2005}. Credit card transactions which differ significantly from the usual shopping behavior of the card owner can indicate that the credit card was stolen or a compromise of data associated with the account occurred {Aleskerov1997}.
+The diagnosis of radiographs can be supported by automated systems to detect breast cancers in  mammographic image analysis {Spence2001}.
+Unplanned downtime of production lines caused by failing components is a serious concern in many industrial environments. Here anomaly detection can be used to detect unusual sensor information to predict possible faults and enabling condition-based maintenance {zhang2011probabilistic}.
+Novelty detection can be used to detect new interesting or unusual galaxies in astronomical data such as the Sloan Digital Sky Survey {Xiong2011}.
+
+Obtaining labeled training data for all types of anomalies is often too expensive. Imagine the labeling has to be done by a human expert or is obtained through costly experiments {Hodge2004}. In some applications anomalies are also very rare as in air traffic safety or space missions. Hence, the problem of anomaly detection is typically unsupervised, however it is implicitly assumed that the dataset contains only very few anomalies. This assumption is reasonable since it is quite often possible to collect large amounts of data for the normal state of a system as, for example usual credit card transactions or network traffic of a system not under attack.
+
+Moreover, we will see that the proposed EXPoSE classifier can be learned incrementally making it applicable to \emph{online} and \emph{streaming} anomaly detection problems. 
+Learning on data streams directly is unavoidable in many applications such as network traffic monitoring, video surveillance and document feeds as data arrives continuously in fast streams with a volume too large or impractical to store.
+
+Only a few anomaly detection algorithms can be applied to large-scale problems and even less are applicable to streaming data. The proposed EXPoSE anomaly detector fills this gap.
+
+\begin{table}[p]
+	\caption{Batch dataset properties}
+\begin{center}
+	\small
+	\begin{tabular}{lrrlc}
+		\toprule 
+		\addlinespace
+		& \multicolumn{1}{c}{\textsc{size ($n$)}}  & \multicolumn{1}{c}{\textsc{dim. ($d$)}} & \multicolumn{1}{c}{\textsc{$CA$ (anomaly class)}} & \multicolumn{1}{c}{\textsc{$CA$ proportion}} \\ 
+		\cmidrule(lr){2-2}\cmidrule(lr){3-3}\cmidrule(lr){4-4}\cmidrule(lr){5-5}
+		\addlinespace
+		\textsc{\textsc{KddCup}} & \num{1036241} & \num{127} & \enquote{attack}& 0.3\%\\
+		\textsc{ForestCover} & \num{286048} & \num{10} & class 4 vs. 2 & ~~9\%\\
+		\textsc{acronym{acronym{MNIST}} 1}	& \num{101968}	& \num{784} & 2,3,4,5,6,7,8,9 & ~~1\%\\
+		\textsc{acronym{acronym{MNIST}} 2}	& \num{90196}	& \num{784} & 1,3,4,5,6,7,8,9 & ~~1\%\\
+		\textsc{acronym{acronym{MNIST}} 3}	& \num{92763}	& \num{784} & 1,2,4,5,6,7,8,9 & ~~1\%\\
+		\textsc{acronym{acronym{MNIST}} 4}	& \num{88417}	& \num{784} & 1,2,3,5,6,7,8,9 & ~~1\%\\
+		\textsc{acronym{acronym{MNIST}} 5}	& \num{82062}	& \num{784} & 1,2,3,4,6,7,8,9 & ~~1\%\\
+		\textsc{acronym{acronym{MNIST}} 6}	& \num{89536}	& \num{784} & 1,2,3,4,5,7,8,9 & ~~1\%\\
+		\textsc{acronym{acronym{MNIST}} 7}	& \num{94771}	& \num{784} & 1,2,3,4,5,6,8,9 & ~~1\%\\
+		\textsc{acronym{acronym{MNIST}} 8}	& \num{88568}	& \num{784} & 1,2,3,4,5,6,7,9 & ~~1\%\\
+		\textsc{acronym{acronym{MNIST}} 9}	& \num{90034}	& \num{784} & 1,2,3,4,5,6,7,8 & ~~1\%\\
+		\textsc{acronym{acronym{SVHN}} 1}	& \num{91475}	& \num{2592} & 2,3,4,5,6,7,8,9 & ~~1\%\\
+		\textsc{acronym{acronym{SVHN}} 2}	& \num{75466}	& \num{2592} & 1,3,4,5,6,7,8,9 & ~~1\%\\
+		\textsc{acronym{acronym{SVHN}} 3}	& \num{61376}	& \num{2592} & 1,2,4,5,6,7,8,9 & ~~1\%\\
+		\textsc{acronym{acronym{SVHN}} 4}	& \num{51135}	& \num{2592} & 1,2,3,5,6,7,8,9 & ~~1\%\\
+		\textsc{acronym{acronym{SVHN}} 5}	& \num{54034}	& \num{2592} & 1,2,3,4,6,7,8,9 & ~~1\%\\
+		\textsc{acronym{acronym{SVHN}} 6}	& \num{41965}	& \num{2592} & 1,2,3,4,5,7,8,9 & ~~1\%\\
+		\textsc{acronym{acronym{SVHN}} 7}	& \num{44438}	& \num{2592} & 1,2,3,4,5,6,8,9 & ~~1\%\\
+		\textsc{acronym{acronym{SVHN}} 8}	& \num{35709}	& \num{2592} & 1,2,3,4,5,6,7,9 & ~~1\%\\
+		\textsc{acronym{acronym{SVHN}} 9}	& \num{34793}	& \num{2592	} & 1,2,3,4,5,6,7,8 & ~~1\%\\
+		\textsc{Shuttle} & \num{58000} & \num{9} & classes 2,3,4,5,7 & ~~6\%\\		
+		\textsc{Satellite} & \num{6435} & \num{36} & classes 2,4,5 & 32\%\\		
+		\textsc{Pima} & \num{768} & \num{8} & \enquote{pos} & 35\%\\
+		\textsc{Breastw} & \num{683} & \num{9} & \enquote{malignant} & 35\%\\
+		\textsc{Arrhythmia} & \num{452} & \num{274} & classes 3,4,5,7,8,9,14,15 & 14\%\\
+		\textsc{Ionosphere} & \num{351} & \num{32} & \enquote{bad} & 36\%\\
+		\textsc{Biomed} & \num{194} & \num{5} & \enquote{carrier} & 34\%\\
+		\addlinespace
+		\bottomrule 
+	\end{tabular}
+\end{center}
+\label{tbl:batch_datasets}
+\end{table}
+\fi

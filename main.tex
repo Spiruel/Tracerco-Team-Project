@@ -1,0 +1,142 @@
+% !TeX program = pdflatex
+% !TeX encoding = UTF-8
+% !TeX spellcheck = en-US
+% !BIB program = bibtex
+
+\documentclass[11pt,a4,oneside,onecolumn,titlepage]{article}
+
+\usepackage{hyperref}
+
+\usepackage{setspace}
+\usepackage{geometry}
+\geometry{
+	%showframe,
+	a4paper,
+	top=3cm,
+	bottom=3cm,
+	innermargin=3.9cm,
+	outermargin=3.9cm,
+}
+\usepackage{multicol}
+\usepackage{setspace}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[]{microtype}
+
+\usepackage[authoryear, round, sort]{natbib}
+\let\cite\citep
+
+% colors
+\usepackage{color,graphicx}
+\usepackage[usenames,dvipsnames]{xcolor}
+\usepackage{titlepic}
+
+% math
+\usepackage{mathtools} % redefine operators
+\usepackage{amssymb}   % needed for mathbb
+\usepackage{amsfonts}  % needed for mathbb
+\usepackage{mathrsfs}  % needed for mathscr
+\usepackage[group-separator={,}, detect-weight=true, detect-family=true]{siunitx}   % replace sistyle, siunits, units
+\usepackage{tabu,booktabs,tabularx} % tables
+\usepackage{csquotes} % quotes
+\usepackage{textcase}
+\usepackage[explicit,pagestyles]{titlesec}
+\usepackage{parskip} % no parident
+\usepackage{xparse}
+\usepackage{subcaption}
+%\usepackage{showframe}
+\usepackage{xfrac}
+
+% font
+\usepackage[sc,osf]{mathpazo}   % With old-style figures and real smallcaps.
+\linespread{1.025}              % Palatino leads a little more leading
+\usepackage[euler-digits,small]{eulervm}
+\usepackage{xspace}
+
+% checkmark
+\usepackage{pifont}%
+\newcommand{\cmark}{\ding{51}}%
+\newcommand{\xmark}{\ding{55}}%
+
+% Theorems:
+\makeatletter
+
+
+
+\DeclareRobustCommand{\spacedallcaps}[1]{\sffamily{\MakeTextUppercase{#1}}}%
+%\DeclareRobustCommand{\spacedallcapssmall}[1]{\sansbold{\MakeTextUppercase{#1}}}%
+\DeclareRobustCommand{\spacedallcapssmall}[1]{{\MakeTextUppercase{#1}}}%
+\DeclareRobustCommand{\spacedlowsmallcaps}[1]{\sffamily{\scshape\MakeTextLowercase{#1}}}%
+
+
+\titleformat{\section}{\raggedright\normalfont\Large\sffamily}{\thesection}{.5em}{{#1}}
+\titleformat{\subsection}{\raggedright\normalfont\large\sffamily}{\thesubsection}{1em}{\spacedallcaps{#1}}
+\titleformat{\subsubsection}{\normalfont\sffamily}{\thesubsubsection}{1em}{\spacedallcaps{#1}}
+\titleformat{\paragraph}{\normalfont\normalsize\sffamily}{\textsc{\MakeTextLowercase{\theparagraph}}}{0pt}{\spacedlowsmallcaps{#1}} 
+
+% graphics
+\graphicspath{{./fig/}}
+
+
+% tables
+\renewcommand{\arraystretch}{1.3}
+\newcommand{\ra}[1]{\renewcommand{\arraystretch}{#1}}
+\newcommand{\maxf}[1]{{\underline{#1}}}
+
+%==============================================
+% references
+%==============================================
+\definecolor{webgreen}           {rgb}{0   ,.5   ,0    }
+\definecolor{webbrown}           {rgb}{.6  ,0    ,0    }
+\hypersetup{%
+	colorlinks=true, 
+	urlcolor=black, linkcolor=black, citecolor=blue
+}
+
+\DeclarePairedDelimiterX\SetDefX[1]{\lbrace}{\rbrace}{
+	\renewcommand\given{  \nonscript\:
+		\delimsize\vert
+		\nonscript\:
+		\mathopen{}
+		\allowbreak}
+	#1
+}
+\newcommand\SetDef{\SetDefX}
+
+% conditional distribution
+\DeclarePairedDelimiterX\conditionX[1]{}{}{
+	\renewcommand\given{  \nonscript\:
+		\delimsize\vert
+		\nonscript\:
+		\mathopen{}
+		\allowbreak}
+	#1
+}
+\newcommand\condition{\conditionX}
+
+\widowpenalty10000
+\clubpenalty10000
+
+\usepackage{tcolorbox}
+
+\begin{document}
+
+%% Front page of thesis
+\input{formatting/frontpage}
+
+%% Main text
+% set page number starts from 1
+\pagenumbering{arabic}
+\setcounter{page}{1}
+
+\include{introduction}      %EVERYONE
+\include{anomalyalgorithms} %PROGRAMMERS
+\include{analysis}          %JAKE & ROB
+\include{conclusion}        %EVERYONE
+\include{bibliography}
+\include{append}
+\end{document}
+
+
+
+
