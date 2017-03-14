@@ -33,7 +33,8 @@ where the array is of length $w$. This is then convolved with the data set, whic
 Figures.~\ref{fig:moving_av} and ~\ref{fig:freq_moving_av} show examples of applying a moving average to data in the time domain and frequency domain, respectively. 
 
 
-----Moving average for dealing with issues with the resloution for the raw data in the y axis
+----Moving average for dealing with issues with the resolution for the raw data in the y axis.
+----Change figure in time domain to show resolution problem and how this was sorted using moving average
 
 \subsection{Statistical Approach}
 
@@ -129,7 +130,7 @@ Unlike the previous two tests, this is applied to the raw data, as the test itse
 \subsection{Fourier Analysis}
 
 \begin{figure}[t]
-    \includegraphics[width=1.0\textwidth]{fig/freq_theory.pdf}
+    \includegraphics[width=1.0\textwidth]{fig/freq_large_4Vnowater.pdf}
     \caption[Fourier Spectrum of 12 V motor in $xys$ axes]{Amplitudes as a function of frequency for the 12 V motor in all 3 axes. }
     \label{fig:frequencies}
 \end{figure}
@@ -154,7 +155,7 @@ where $S$ is the sampling rate with which the data was collected ($S=3000$ Hz fo
 
 When representing the spectrum, the power spectral density (PSD) was used, which is found by multiplying the complex amplitude obtained from the $FFT$ by its complex conjugate, giving $|FFT|^2$. This is useful as it is proportional to the power output per unit frequency, and in addition makes peaks more visually prominent in the spectrum. The $|FFT|^2$ was then normalised by dividing by $N$, the length of the data, to ensure the amplitudes of peaks in Fourier space do not depend on the length of data used to generate them (so that a spectrum taken from 2 seconds of data will have the same amplitudes as one taken from 2 minutes of data).
 
-Figure~\ref{fig:frequencies} shows the power spectral density returned using this method. A logarithmic axis is used to make the less prominent peaks visible.
+Figure.~\ref{fig:frequencies} shows the power spectral density returned using this method. A logarithmic axis is used to make the less prominent peaks visible.
 
 \subsubsection{Gaussian fitting in frequency space}
 
@@ -177,9 +178,16 @@ This process was then repeated for data that was recorded when trying to induce 
  
 \subsubsection{Harmonic Frequencies}
 
-
 \subsection{Least Squares Anomaly Detection}
-Included amongst our anomaly detection methods is a squared-loss objective function which is quick to detect anomalous data given a set of training and testing datasets. Due to the rudimentary nature of the function and the very simple analytical solution it has a speed advantage over other methods, as well as presenting a static anomaly score across the train and test data to visualise the magnitude of the anomalous data points. It can also be used to evaluate the difference between sub-sequences and therefore isn't invalidated when the dataset contains structural dependence.
+Included amongst the anomaly detection methods is a squared-loss objective function which is quick to detect anomalous data given a set of training and testing data sets. Due to the rudimentary nature of the function and the very simple analytical solution it has a speed advantage over other methods, as well as presenting an anomaly score across the train and test data to visualise the magnitude of the anomalous data points. It can also be used to evaluate the difference between sub-sequences and therefore isn't invalidated when the data set contains structural dependence.
+
+Initially a moving average was applied to the data to low pass it before median filtering. The class-conditional probability of the data point,  $p(y|\mathbf{x})$, was then determined for $p(y=i|\mathbf{x}, \mathbf{\theta_i})$ using equations $q(y=i|\mathbf{x}$, $\mathbf{\theta_i})$ for each $i \in \chi$, where $\chi = \{1, ...., c\}$ is the set of all possible classes. The model was fit using
+
+\begin{equation}
+    J_i(\mathbf{\theta_i})=\dfrac{1}{2}\int(q(y=i|\mathbf{x},\mathbf{\theta_i}) - p(y=i|\mathbf{x}))^2p(\mathbf{x})d\mathbf{x}.
+\end{equation}
+
+Using the classes of data defined by the class-conditional probabilities of the data points we can determine the class-conditional probability of anomalous data by making similar assumptions to those made in a one-class support vector machine regarding the distribution in the test data relative to the classes used within the training data. Assumptions such as the outliers are restricted to exist in low-density data-space and, using the training data, a kernel model can describe high-density regions.
 
 
 \begin{itemize}
@@ -199,7 +207,7 @@ Included amongst our anomaly detection methods is a squared-loss objective funct
 
 Cluster analysis involves combining data points into groups, or clusters, in such a way that the points in each cluster are more similar to each other than other points outside of the cluster. Any data points that do not belong to a cluster are defined as outliers. 
 
-Figure~\ref{fig:anomalies} in \S \ref{sec:introduction} shows an example of clusters in 2 dimensions. 
+Figure.~\ref{fig:anomalies} in \S \ref{sec:introduction} shows an example of clusters in 2 dimensions. 
 
 K-means clustering is one of the most highly used cluster analysis methods, due to it being much less computationally intensive in comparison to other approaches \cite{Kanungo:2002:EKC:628329.628801}.
 
@@ -220,13 +228,13 @@ The general process is described as follows:
     \item Repeat steps 2 and 3 until convergence to a solution is achieved.
 \end{enumerate}
 
-Figure~\ref{fig:anomalies} in \S \ref{sec:introduction} shows an example of clusters in 2 dimensions. 
+Figure.~\ref{fig:anomalies} in \S \ref{sec:introduction} shows an example of clusters in 2 dimensions. 
 
 In order to apply K-means clustering to time series data, the n-dimensional space in which the clusters are defined first had to be defined. 
 
 The entire signal waveform was split into segments in time, with each segment consisting of 24 data points. These segments will then be defined by a set of features, which will form the n-dimensional space. For example, the features could be the mean value and standard deviation of each segment, in which case a 2-dimensional space would be considered. Instead, in order to ensure no information is lost, each element in the 24-element segment is taken to be a separate dimension. Therefore a segment is completely specified by a single point in 24-dimensional space \cite{lin_vlachos_keogh_gunopulos_2004}.
 
-All of the segments that make up the total waveform can then be plotted in this 24-dimensional space. Segments with similar features will cluster together. If $k$ clusters are defined, then the centroids of each cluster can be found to give $k$ coordinates in the 24-dimensional space, one for each centroid. Figure~\ref{fig:kmeans_training} shows ten random segments, taken from the original waveform, also known as the "training data".
+All of the segments that make up the total waveform can then be plotted in this 24-dimensional space. Segments with similar features will cluster together. If $k$ clusters are defined, then the centroids of each cluster can be found to give $k$ coordinates in the 24-dimensional space, one for each centroid. Figure.~\ref{fig:kmeans_training} shows ten random segments, taken from the original waveform, also known as the "training data".
 
 The centroids, being points in the defined 24-dimensional space, are themselves waveform segments. These waveform segments will be referred to as synthetic segments, as they were generated from the input data but aren't themselves a part of the original data. 
 
@@ -242,9 +250,9 @@ The centroids, being points in the defined 24-dimensional space, are themselves 
     \label{fig:kmeans_synthetic}
 \end{figure}
 
-This creates a "library" of $k$ synthetic waveforms, which can be stitched together in order to recreate the original total signal. Figure~\ref{fig:kmeans_synthetic} shows a random selection of ten of these synthetically generated waveforms.
+This creates a "library" of $k$ synthetic waveforms, which can be stitched together in order to recreate the original total signal. Figure.~\ref{fig:kmeans_synthetic} shows a random selection of ten of these synthetically generated waveforms.
 
-Figure~\ref{fig:kmeans_training} shows that all of the segments begin and end with an amplitude of $0$. This is as a result of a process known as "windowing" being applied. Windowing is the process of multiplying the training segment by a sine squared function of the form $\sin^2(\pi/N_E)$, where $N_E$ is the number of elements per segment. It is necessary to ensure that all of the training segments begin and end with an amplitude of $0$, so that the learned synthetic segments also have zero amplitude at both ends. This ensures no discontinuities when stitching together the synthetic segments to recreate the entire signal waveform. 
+Figure.~\ref{fig:kmeans_training} shows that all of the segments begin and end with an amplitude of $0$. This is as a result of a process known as "windowing" being applied. Windowing is the process of multiplying the training segment by a sine squared function of the form $\sin^2(\pi/N_E)$, where $N_E$ is the number of elements per segment. It is necessary to ensure that all of the training segments begin and end with an amplitude of $0$, so that the learned synthetic segments also have zero amplitude at both ends. This ensures no discontinuities when stitching together the synthetic segments to recreate the entire signal waveform. 
 
 The process creating a reconstruction of a waveform once the synthetic segments are obtained is as follows:
 
@@ -261,12 +269,12 @@ Note that this reconstruction can be of a waveform different to the waveform use
 
 
 \begin{figure}[t]
-    \includegraphics[width=1.0\textwidth]{fig/kmeans.pdf}
+    \includegraphics[width=1.0\textwidth]{fig/kmeans2.pdf}
     \caption[K mean clustering plot]{Fancy figure goes here.}
     \label{fig:kmeanerror}
 \end{figure}
 
-Figure~\ref{fig:kmeanerror} shows an example of a reconstruction of testing data from synthetic segments created from a baseline signal of training data. The reconstruction error is the absolute difference between the reconstructed testing data and the actual testing data. Any spike in this reconstruction error, or a high average value over the entire length of the waveform, indicates that the motor is behaving differently from its optimum operation assumed from the baseline run.
+Figure.~\ref{fig:kmeanerror} shows an example of a reconstruction of testing data from synthetic segments created from a baseline signal of training data. The reconstruction error is the absolute difference between the reconstructed testing data and the actual testing data. Any spike in this reconstruction error, or a high average value over the entire length of the waveform, indicates that the motor is behaving differently from its optimum operation assumed from the baseline run.
 
 \subsection{LSTM Recurrent Neural Networks}
 \label{subsec:LSTM}
@@ -296,13 +304,6 @@ LSTM (long short-term memory) is a type of RNN that was first proposed by \cite{
 An LSTM consists of many recurrently connected subnets known as memory blocks. A memory block consists of three gates: the input, forget and output, as well as the cell state \cite{gers2000learning}. The core idea behind LSTMs is the cell state - which acts like a a conveyor belt. It lets information flow across the memory block unchanged, with the exception of a few minor linear interactions. These interactions are the gates - responsible for the removal or addition of information to the cell state.
 
 %the optionally let memory through. each is is a sigmoid neural network and a multiplication operation the sigmoid function outputs a values between 0 and 1 which describes how much of each component should be let through we represent each of the following gates through the following equation.
-
-\begin{figure}[t]
-    \centering
-    \includegraphics[width=1.0\textwidth]{neuralnetwork.pdf}
-    \caption[Neural Network]{Using the LSTM functionality provided by \texttt{Keras}.}
-    \label{fig:neuralnet}
-\end{figure}
 
 \begin{figure}[t]
     \centering
@@ -350,9 +351,28 @@ In the interest of more efficient computation, the LSTM model used in this repor
 
 \subsubsection{LSTM implementation for anomaly detection}
 
+\begin{figure}[t]
+    \centering
+    \includegraphics[width=1.0\textwidth]{neuralnetwork.pdf}
+    \caption[Neural Network]{Using the LSTM functionality provided by \texttt{Keras}.}
+    \label{fig:neuralnet}
+\end{figure}
+
+The LSTM results shown in Figure.~\ref{fig:neuralnet} were achieved with the use of a high-level neural network library named \texttt{Keras}. This operated using a \texttt{TensorFlow} backend, a recently open-sourced framework released by Google in order to aid in the implementation of large-scale learning models \cite{Abadi:2016:TSL:3026877.3026899}.
+
+The description of how the LSTM was programmed is as follows. We first build a sequential model, meaning that layers are stacked in the object.  We define a network with a 1D input, with three hidden layers of sizes 64, 256 and 100, and end with a 1D output layer.
+
+With the model initialised we define our first LSTM layer that behaves as a standard recurrent layer. We add a 20\% dropout to this layer. 
+
+Dropout is a regularisation method, that when used correctly, greatly reduces overfitting in LSTMs \cite{2014arXiv1409.2329Z}. Dropout involves randomly removing units from the network during the training process \cite{2013arXiv1311.0701B}.
+
+An additional two layers are then added, again with a dropout of 20\%. For the last layer we choose a dense feedforward layer with a linear activation. We compile the model using a mean square error using the \texttt{rmsprop} gradient descent optimisation algorithm \cite{krause2016multiplicative}.
+
 %disadvantges
 %ultimate 'black boxes'. Apart from defining the general archetecture of a network and perhaps initially seeding it with a random numbers, the user has no other role than to feed it input and watch it train and await the output. The final product of this activity is a trained network that provides no equations or coefficients defining a relationship (as in regression) beyond its own internal mathematics. The network 'IS' the final equation of the relationship.
 %tend to be slower to train than other types of networks and sometimes require thousands of epochs. If run on a truly parallel computer system this issue is not really a problem an ANN can capture many kinds of relationships it allows the user to quickly and relatively easily model phenomena which otherwise may have been very difficult or imposible to explain otherwise.
+%watch out for overfitting
+%More data is almost always better, because it helps fight overfitting.
 
 \subsection{Rejected Methods of Anomaly Detection}
 This subsection will include the methods considered for anomaly detection and why they were ultimately rejected to show that a wide range were considered but only certain few were used to ensure quality in the analysis.
