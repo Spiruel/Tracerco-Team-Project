@@ -1,0 +1,102 @@
+\documentclass[11pt]{meetingmins}
+
+\setcommittee{TracerCo Team Project Term 2 - Meeting Minutes}
+
+\setmembers{
+  S.~Bancroft,
+  A.~Bell,
+  D.~Eden,
+  J.~Farr,
+  R.~Mercer,
+  T.~Tzokov
+}
+
+\setdate{January 30, 2017}
+
+\setpresent{
+  S.~Bancroft,
+  A.~Bell,
+  D.~Eden,
+  J.~Farr,
+  R.~Mercer,
+  T.~Tzokov
+}
+
+
+\begin{document}
+\maketitle
+
+
+\section{Arduino Vs. NI DAQ}
+\begin{items}
+\item
+Sampling rate of 1500Hz for contact mic. Chris said Arduino Probably doesn't have high enough sampling rate to deal with this.
+
+\item
+Use National Instruments DAQ box - don't need to worry about live processing with Arduino for now.
+
+\item
+Previous group said sampling at 150Hz is adequate, but Chris said that's for us to determine by using as high sampling frequencies as possible.
+
+\item
+Stop using Arduino - use National Instruments DAQ.
+
+\item
+Could possibly propose Arduino for a final design, if we determine that its sampling rate is high enough. But use NI DAQ box for the analysis as this has much higher sampling rate.
+
+\item
+Not providing hardware for a project, simply finding out which methods/algorithms work for data analysis - so doesn't matter that we're using National Instruments.
+\end{items}
+
+\section{Further Experimental Work}
+\begin{items}
+\item
+Increase load on motor by placing rotor in water.
+
+\item
+Eliminate frequencies more than half the sampling frequency. Use low pass filter. $2nd$ or $4th$ order Butterworth filter to avoid aliasing.
+
+\item
+Should record data at higher sampling frequency than contact mic. Want to record at 3000Hz or more to be more than twice the sampling frequency of the contact mic (Nyqist theorem).
+
+\item
+Overcharge a motor - see what happens when it gets close to failure.
+
+\item
+Data samples only need to be approximately 30 seconds long.
+
+\item
+How do you determine rotation speed of motor? - Place disk on end with hole and use a light gate to count rotations.
+
+\end{items}
+
+\section{Analysis}
+\begin{items}
+\item
+Neural networks
+
+\item
+Average power spectra to get smooth curve and plot it. See where frequency peaks.
+
+\item
+Use chi-squared fitting to fit a peak to the data with error bars - find FWHM (full-width-half-maximum) and peak hight etc.
+
+\item
+What are these measurements to good/bad motors. What is the 'goodness' of fit for each parameter?
+
+\item
+Peak of frequency spectrum vs rotation speed of motor
+
+\item
+Goal is to return algorithms
+
+\item
+Try to quantify and understand data results before implementing neural networks.
+
+\item
+Contact Dr Hindmarch to get python data recording modules. Give continuous data acquisition using the national instruments DAQ box to give real time data.
+
+\end{items}
+
+
+\end{document}

@@ -3,6 +3,23 @@
 
 \subsection{Motor components and setup}
 
+A basic DC motor consists of a stator, a rotor, a commutator, an external magnetic field, brushes, bearings and a shaft. A DC power supply is connected across the brushes, transmitting power through the commutator into windings around the rotor. The current flowing through the windings interacts with the permanent magnetic field producing a Lorentz force resulting in a torque across the windings. LORENTZ FORCE HERE
+
+As the rotor spins away from a position with the windings perpendicular to the magnetic field, the torque is reduced. To allow a rotational force over the full revolution, commutators invert the current flow periodically. 
+
+\begin{figure}
+    \centering
+    \includegraphics[trim={2cm 17.2cm 5.5cm 2.5cm}, clip, width=0.6\textwidth]{2polevs6polemotor.pdf}
+    \caption{Caption}
+    \label{fig:2pole_vs_6pole}
+\end{figure}
+
+In the simplest possible motor, the rotor is composed of only one set of windings, with a split ring commutator inverting the power supply every half rotation. A more efficient model is to have multiple windings that receive power throughout different stages in the rotation shown in Figure~\ref{fig:2pole_vs_6pole}. This allows maximum torque to be applied throughout the entire rotation.
+
+The brushes of a motor can be either spring loaded carbon rods, or copper strips pressed against the commutator. Carbon rods are far more efficient and less damaging to the motor, the reasons for this will be discussed further. With advancements in technology, brushless DC motors are becoming increasingly popular, removing the inefficiencies induced by the traditional brushes. 
+
+Mechanical components, such as the bearings, shaft or motor housing are prone to physical damage. This could be due to either physical trauma or a contamination within the motor during operation. Failure of this type would need heavy repairs, with sometimes expensive replacements necessary, it is therefore important to diagnose any unhealthy running motor to minimise the damage.
+
 \begin{figure}
     \centering
     \begin{circuitikz} 
@@ -33,29 +50,29 @@
     ;
     \end{circuitikz}
     \caption{Caption}
-    \label{fig:my_label}
+    \label{fig:circuit_diagram}
 \end{figure}
 
-A basic DC motor consists of a stator, a rotor, a commutator, an external magnetic field, brushes, bearings and a shaft. A DC power supply is connected across the brushes, transmitting power through the commutator into windings around the rotor. The current flowing through the windings interacts with the permanent magnetic field producing a Lorentz force resulting in a torque across the windings. LORENTZ FORCE HERE
-
-As the rotor spins away from a position with the windings perpendicular to the magnetic field, the torque is reduced. To allow a rotational force over the full revolution, commutators invert the current flow periodically. 
-
-In the simplest possible motor, the rotor is composed of only one set of windings, with a split ring commutator inverting the power supply every half rotation. A more efficient model is to have multiple windings that receive power throughout different stages in the rotation. (figure here comparing 2 pole to multipole) This allows maximum torque to be applied throughout the entire rotation.
-
-The brushes of a motor can be either spring loaded carbon rods, or copper strips pressed against the commutator. Carbon rods are far more efficient and less damaging to the motor, the reasons for this will be discussed further. With advancements in technology, brushless DC motors are becoming increasingly popular, removing the inefficiencies induced by the traditional brushes. 
-
-Mechanical components, such as the bearings, shaft or motor housing are prone to physical damage. This could be due to either physical trauma or a contamination within the motor during operation. Failure of this type would need heavy repairs, with sometimes expensive replacements necessary, it is therefore important to diagnose any unhealthy running motor to minimise the damage.
-
-The vibrational data collected by the contact microphones provided an analogue output, which when passed through a NI QAQ box, could be converted and saved as a csv file. The circuit diagram showing the configuration of components is displayed in….figure here
+The vibrational data collected by the contact microphones provided an analogue output, which when passed through a NI multifunction DAQ\footnote{NI USB-6009  Multifunction DAQ USB Device, Datasheet: \url{http://www.ni.com/datasheet/pdf/en/ds-218}}, could be converted and saved as a csv file. The circuit diagram showing the configuration of components is displayed in Figure \ref{fig:circuit_diagram}. This was produced using a Veroboard.
 
 %Each motor component, what it does and how they fail.
 
 %How the data collected by the sensors is connected to the DAQ box so that it can be used.
 
-\subsection{Baseline Test}
+\subsection{Calibration Tests}
+
+\subsection{Baseline Tests}
+
+\begin{figure}[t]
+    \includegraphics[width=1.0\textwidth]{fig/kmeans_large_4Vnowater.pdf}
+    \caption[K-means Large Motor Reconstruction No Water]{K-means reconstruction applied to three seconds of data from large motor running at 4 V. Top: the original testing data. Middle: the reconstruction using K-means. Bottom: the reconstruction error between the reconstructed and original signal.}
+    \label{fig:kmeans_large4V}
+\end{figure}
+
+Figure~\ref{fig:kmeans_large4V} shows the K-means reconstruction of a three second signal using training and testing data both from a baseline test run. The first three seconds of the baseline test run was used as training data and the second three seconds used as fitting data. This was done to check if the synthetic segments could be used to recreate a later section of the same baseline run with minimal reconstruction error. 
 
 \subsection{Overheating}
-
+%talk about snipped coils too
 Overheating is widely regarded as the most common cause of motor failures, with many other types of motor deterioration leading to overheating. This is such a substantial problem that a rise of just 10 $^o$C above the regular running temperature causes the life expectancy of the motor to halve. The life span is halved once again for every 10 $^o$C the temperature is raised further.
 
 The problem arises as, during overheating, the varnish covering the metal wires begins to melt. If this occurs at two points of wires that are in contact, the coil of the motor can short circuit.
@@ -71,7 +88,7 @@ Therefore the speed of revolution would no longer be uniform. This can cause oth
 
 \begin{figure}[t]
     \includegraphics[width=1.0\textwidth]{fig/Gears_Removed_Inside.png}
-    \caption[Time Domain]{The inside of the Gears removed motor showing the 7 separate coils, one of which was placed directly on the hotplate at 150$^o$C for one hour to induce failure.}
+    \caption[Time Domain]{The inside of the Gears removed motor showing the 7 separate coils, one of which was placed directly on the hotplate at 150 $^o$C for one hour to induce failure.}
     \label{fig:hotplate_motor}
 \end{figure}
 
@@ -107,7 +124,11 @@ A second motor, also with a regular operating voltage of 12 V, was run at 30 V f
 up to 60 $^o$C. %Correct???
 Therefore, readings were taken before and after the one hour run. This allowed us to explore the long term effects of overvoltaging a motor.
 
-%Undervoltage experiment
+%Undervoltage experiment (large motor)
+
+In order to investigate the effects of undervoltaging a motor, data was collected when running a 12 V motor from 1 V through to 5 V, in 1 V instalments. 
+
+%Undervoltage: talk about rotary encoder and how not constant rotation speed
 
 %Do we need photos of these motors???
 
@@ -115,17 +136,32 @@ Therefore, readings were taken before and after the one hour run. This allowed u
 
 \subsection{Load}
 
-%Leads to overheating. Draws more current and voltage.
+\begin{figure}[t]
+    \includegraphics[width=1.0\textwidth]{fig/kmeans_large_4Vwater.pdf}
+    \caption[K-means Large Motor Reconstruction In Water]{K-means reconstruction applied to three seconds of data from large motor running at 4V under a load applied through a fan and a bucket of water. Top: the original testing data. Middle: the reconstruction using K-means. Bottom: the reconstruction error between the reconstructed and original signal.}
+    \label{fig:kmeans_large4Vwater}
+\end{figure}
 
-%Gripped shaft
-    %This should produce an anomaly and show us what we are looking for.
+The presence of a load on the motor puts a large amount of stress on the motor. As the motor struggles to reach the desired voltage, a greater current is drawn, which leads to overheating.
 
 %Fans in water, 1cm, 2cm, 3cm
     %12V Geared motor ran fine and didn't seem to struggle with the load even with the thickest fan.
     %Large motor was not geared and struggled to reach any voltage over 4V with 1cm fan.
         %Ran at 1-4V in water with 1cm fan.
+        
+There are many ways of adding a load to a motor, but attaching a fan immersed in water was chosen due to the ability to vary the load through using fans of different widths (1 cm, 2 cm and 3 cm).
     
-\subsection{Misalignment}
+\subsection{Rotor Imbalance}
+As the rotor spins within the motor, it is important for the weight to be evenly distributed around the central axle. Any imbalance present can cause the rotor to shift in position toward the areas of concentrated mass. As a motor runs increased levels of vibrations are produced with the frequency of the vibrations matching the shaft rotation speed. This unnecessarily increases the stress on the bearings and, in extreme cases, this can cause contact between the rotor and the stator. This increased strain on the bearings causes a larger friction, not only reducing the efficiency of the motor but also damaging the bearings. This can lead to complicated maintenance operations that would be otherwise unnecessary for a properly aligned motor.
+
+If there is contact between the rotor and stator, there is again an increase in friction. This is often a larger frictional force, decreasing the efficiency further, but also generating large amounts of heat. When operated in this condition for long periods of time, this can cause overheating discussed above. As the rotor spins against the stator, the friction is capable of causing unwanted damage to both the rotor and the stator. In the case that this force is large enough, the permanent magnets could become detached from the stator, ultimately resulting in a failed motor.
+
+Some possible causes of an imbalanced motor include uneven wear through use, design or assembly errors, and an eccentricity of the rotor or any physical damage distorting components. Observing additional, unexpected frequencies could be due to an imbalance within the motor, and as such are a warning sign to the decline in health of the motor. 
+
+To simulate an imbalanced motor, the shaft of a motor was bent with varying severities. (figure here of “small misaligned motor”) As with all motors, it is impossible to attain a state of perfect balance, so small bends are expected in any initial baseline test. As the angle of the shaft from the normal was increased, the motors health deteriorated greatly. At large bends, the frictional force became so large that the motor required an initial force to start movement. This could represent a heavy contact between the rotor and the stator. 
+
+%Normally, unbalance will produce a 1x or shaft speed vibration that is 80 percent or more of the total vibration. If 1x vibration is less than 80 percent, suspect other problems in addition to the unbalance.
+
 %Motor shaft misaligned from the initial location, causing a non constant shaft rotation. Misalignment can cause damage to the bearings, the stator or the rotor due to knocking as it rotates, all leading to a final failure of the motor. Even small deviations from a perfectly aligned motor can cause damage, so detecting misalignment before damage occurs is important. 
 \subsection{Brush Damage}
 The brushes of a DC motor are a vital component, key to the proper working of the motor, allowing a DC power supply to provide an almost constant driving force throughout the entire revolution of the motor. The stationary brushes, combined with the rotating commutator attached to the rotor, periodically inverts the power supply throughout the revolutions. The commutator is composed of strips of conducting metal, usually copper, placed around the rotor. The strips of copper supply the current from the spring loaded brushes to the windings.  Without this periodic inversion of current direction through the windings, the motor would fail to spin and, as such, a good contact between the face of the brush and the commutator is necessary. 

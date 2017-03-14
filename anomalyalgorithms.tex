@@ -1,6 +1,8 @@
 \section{Anomaly Detection Methods}
 \label{sec:methods}
 
+----Introduce section
+
 As part of the data reduction procedure, a moving average was applied to data in both the time domain and the frequency domain. A moving average essentially applies a low-pass filter to the data.
 
 For the time domain, this was mainly applied in order to ensure more accurate reconstructions when using techniques such as K-mean Clustering Reconstruction (see \S~\ref{subsec:kmeans}) and LSTM Recurrent Neural Networks (see \S~\ref{subsec:LSTM}).
@@ -178,6 +180,8 @@ This process was then repeated for data that was recorded when trying to induce 
 
 \subsection{Least Squares Anomaly Detection}
 Included amongst our anomaly detection methods is a squared-loss objective function which is quick to detect anomalous data given a set of training and testing datasets. Due to the rudimentary nature of the function and the very simple analytical solution it has a speed advantage over other methods, as well as presenting a static anomaly score across the train and test data to visualise the magnitude of the anomalous data points. It can also be used to evaluate the difference between sub-sequences and therefore isn't invalidated when the dataset contains structural dependence.
+
+
 \begin{itemize}
 \item Moving average
 \item Median filters
@@ -185,14 +189,12 @@ Included amongst our anomaly detection methods is a squared-loss objective funct
 \end{itemize}
 
 \begin{figure}[t]
-    \includegraphics[width=1.0\textwidth]{fig/lsanomaly.pdf}
+    \includegraphics[width=1.0\textwidth]{lsanomaly.pdf}
     \caption[Least Squares Anomaly Score]{Spruced up plot here.}
     \label{fig:lsanomaly}
 \end{figure}
 
-\subsection{Machine Learning}  
-
-\subsubsection{K-Means Clustering}
+\subsection{K-Means Clustering}
 \label{subsec:kmeans}
 
 Cluster analysis involves combining data points into groups, or clusters, in such a way that the points in each cluster are more similar to each other than other points outside of the cluster. Any data points that do not belong to a cluster are defined as outliers. 
@@ -222,12 +224,41 @@ Figure~\ref{fig:anomalies} in \S \ref{sec:introduction} shows an example of clus
 
 In order to apply K-means clustering to time series data, the n-dimensional space in which the clusters are defined first had to be defined. 
 
-The entire waveform was split into segments in time, with each segment consisting of 12 data points. These segments will then be defined by a set of features, which will form the n-dimensional space. For example, the features could be the mean value and standard deviation of each segment, in which case a 2-dimensional space would be considered. 
+The entire signal waveform was split into segments in time, with each segment consisting of 24 data points. These segments will then be defined by a set of features, which will form the n-dimensional space. For example, the features could be the mean value and standard deviation of each segment, in which case a 2-dimensional space would be considered. Instead, in order to ensure no information is lost, each element in the 24-element segment is taken to be a separate dimension. Therefore a segment is completely specified by a single point in 24-dimensional space \cite{lin_vlachos_keogh_gunopulos_2004}.
+
+All of the segments that make up the total waveform can then be plotted in this 24-dimensional space. Segments with similar features will cluster together. If $k$ clusters are defined, then the centroids of each cluster can be found to give $k$ coordinates in the 24-dimensional space, one for each centroid. Figure~\ref{fig:kmeans_training} shows ten random segments, taken from the original waveform, also known as the "training data".
+
+The centroids, being points in the defined 24-dimensional space, are themselves waveform segments. These waveform segments will be referred to as synthetic segments, as they were generated from the input data but aren't themselves a part of the original data. 
+
+\begin{figure}[t]
+    \includegraphics[width=1.0\textwidth]{fig/kmeans_training.pdf}
+    \caption[K-means training segments]{A random selection of training segments, with windowing applied.}
+    \label{fig:kmeans_training}
+\end{figure}
+
+\begin{figure}[t]
+    \includegraphics[width=1.0\textwidth]{fig/kmeans_synthetic.pdf}
+    \caption[K-means synthetic segments]{A random selection of synthetic segments, generated from the centroids of clusters.}
+    \label{fig:kmeans_synthetic}
+\end{figure}
+
+This creates a "library" of $k$ synthetic waveforms, which can be stitched together in order to recreate the original total signal. Figure~\ref{fig:kmeans_synthetic} shows a random selection of ten of these synthetically generated waveforms.
+
+Figure~\ref{fig:kmeans_training} shows that all of the segments begin and end with an amplitude of $0$. This is as a result of a process known as "windowing" being applied. Windowing is the process of multiplying the training segment by a sine squared function of the form $\sin^2(\pi/N_E)$, where $N_E$ is the number of elements per segment. It is necessary to ensure that all of the training segments begin and end with an amplitude of $0$, so that the learned synthetic segments also have zero amplitude at both ends. This ensures no discontinuities when stitching together the synthetic segments to recreate the entire signal waveform. 
+
+The process creating a reconstruction of a waveform once the synthetic segments are obtained is as follows:
+
+\begin{enumerate}
+    \item Split the training waveform into segments of length $N_E$ (same length as before). Have the start each segment at 2 elements later than the previous one, to ensure a large overlap between segments.
+    \item From these segments, multiply each one by the sine windowing function and find the centroids in $N_E$-dimensional space ($N_E$ taken to be 24 as before) to create a library of $k$ synthetic segments. This functionality was provided by the python package sklearn.
+    \item Split the testing data (the data to reconstruct) into segments containing $N_E$ elements each. This time ensure that each segment overlaps by $N_E/2$ so that, for example, the first half of the second segment is taken from the same part of the waveform as the second half of the first segment.
+    \item For each testing segment, find the synthetic segment that is the minimum Euclidean distance away in $N_E$-dimensional space, thus describing the closest fit. 
+    \item Add the synthetic segments together to recreate the entire testing waveform. As the testing segments are separated by $N_E$, there is an overlap of half a segment for each segment. For the windowing function, $\sin^2(\pi/N_E)$, this corresponds to a change of phase of $1/4$ of a wavelength, or simply $\cos^2(\pi/N_E)$. Therefore when adding the two segments together, the windowing functions cancel to $\sin^2(\pi/N_E) + \cos^2(\pi/N_E) = 1$. This ensures there is no change in amplitude for any element that is a part of two overlapping segments.
+\end{enumerate}
 
 
-The aim is to reconstruct the entire signal using synthetic waveform segments of length 12 data points, which are created from the centroids of the clusters defined in 12-dimensional space. 
+Note that this reconstruction can be of a waveform different to the waveform used as training data. The signal waveform attempted to be reconstructed will henceforth be referred to as the "testing data". This allows for a method known as semi-supervised K-means reconstruction \cite{596afe3f2b5a4ff3b8f4f9793ad2f4ee}, in which synthetic segments are generated from baseline data, and then these segments can be used to create attempted reconstructions of data which was taken when trying induce failures. When the testing data differs from the training data however, a very important step is to multiply the testing data by a factor to ensure it has the same average amplitude as the training data - otherwise very large reconstruction errors will result.
 
-Talk about semi-supervised K-means and why this method is semi-supervised rather than unsupervised \cite{596afe3f2b5a4ff3b8f4f9793ad2f4ee}.
 
 \begin{figure}[t]
     \includegraphics[width=1.0\textwidth]{fig/kmeans.pdf}
@@ -235,8 +266,12 @@ Talk about semi-supervised K-means and why this method is semi-supervised rather
     \label{fig:kmeanerror}
 \end{figure}
 
-\subsubsection{LSTM Recurrent Neural Networks}
+Figure~\ref{fig:kmeanerror} shows an example of a reconstruction of testing data from synthetic segments created from a baseline signal of training data. The reconstruction error is the absolute difference between the reconstructed testing data and the actual testing data. Any spike in this reconstruction error, or a high average value over the entire length of the waveform, indicates that the motor is behaving differently from its optimum operation assumed from the baseline run.
+
+\subsection{LSTM Recurrent Neural Networks}
 \label{subsec:LSTM}
+
+\subsubsection{Description of LSTM architecture}
 
 %Machine learning is the science of programming computers in a manner that means they carry out tasks while not being explicitly programmed. In the past decade, machine learning has given us self-driving cars, practical speech recognition, effective web search, and a vastly improved understanding of the human genome.
 
@@ -258,15 +293,66 @@ However one problem with RNNs is that the error signal suffers from an exponenti
 
 LSTM (long short-term memory) is a type of RNN that was first proposed by \cite{Hochreiter:1997:LSM:1246443.1246450} as a way to overcome the vanishing gradient problem. An LSTM network is extremely well suited for learning tasks such as speech recognition \cite{Graves2005602}, handwriting recognition \cite{graves2008unconstrained} and music composition \cite{eck2002learning}. The properties of LSTM networks also make them extremely valuable for the prediction of time series \cite{gers2001applying}.
 
+An LSTM consists of many recurrently connected subnets known as memory blocks. A memory block consists of three gates: the input, forget and output, as well as the cell state \cite{gers2000learning}. The core idea behind LSTMs is the cell state - which acts like a a conveyor belt. It lets information flow across the memory block unchanged, with the exception of a few minor linear interactions. These interactions are the gates - responsible for the removal or addition of information to the cell state.
 
-%An LSTM cell consists of three gates. The input, forget and output. as well as the cell state. the cell state is like a a conveyor belt. just lets memory flow across unchanged. except for a few minor linear interactions these interactions are the gates. we can add or remove memory from the cell state regulated by that. the optionally let memory through. each is is a sigmoid neural network and a multiplication operation the sigmoid function outputs a values between 0 and 1 which describes how much of each component should be let through we represent each of the following gates through the following equation.
+%the optionally let memory through. each is is a sigmoid neural network and a multiplication operation the sigmoid function outputs a values between 0 and 1 which describes how much of each component should be let through we represent each of the following gates through the following equation.
 
 \begin{figure}[t]
-    \includegraphics[width=1.0\textwidth]{fig/neuralnetwork.pdf}
+    \centering
+    \includegraphics[width=1.0\textwidth]{neuralnetwork.pdf}
     \caption[Neural Network]{Using the LSTM functionality provided by \texttt{Keras}.}
-    \label{fig:kmeanerror}
+    \label{fig:neuralnet}
 \end{figure}
 
+\begin{figure}[t]
+    \centering
+    \includegraphics[width=0.5\textwidth]{LSTMcell.pdf}
+    \caption[LSTM cell schematic]{Schematic of a long short-term memory block, used as a `neuron' in the hidden layers of a recurrent neural network.}
+    \label{fig:lstmcell}
+\end{figure}
+
+A more mathematical description of the LSTM on how a layer of memory cells is updated begins with an input $x_t$ at timestep $t$. We define weight matrices as $W_i$,$W_f$,$W_c$,$W_o$,$U_i$,$U_f$,$U_c$,$U_o$ and bias vectors $b_i$,$b_f$,$b_c$,$b_o$.
+
+At a time $t$, we define the input gate value $i_t$ and candidate value for the state of the memory cells $\widetilde{C}_t$ with,
+
+\begin{equation}
+    i_t = \sigma(W_i x_t + U_i h_{t-1} + b_i)~,
+\end{equation}
+\begin{equation}
+    \widetilde{C}_t = \tanh(W_c x_t + U_c h_{t-1} + b_c)~.
+\end{equation}
+
+Next we calculate $f_t$, the value for the activation of the memory cells' forget gates,
+
+\begin{equation}
+    f_t = \sigma (W_f x_t + U_f h_{t-1} +b_f)~,
+\end{equation}
+
+where $\sigma$ is the activation function.
+
+With these computed values we can then calculate $C_T$, the new state for the memory cells.
+
+\begin{equation}
+    C_t = i_t * \widetilde{C}_t + f_t * C_{t-1}~,
+\end{equation}
+
+And finally, one can now compute the value of the output gates and therefore outputs of the memory cells,
+
+\begin{equation}
+   o_t = \sigma(W_o x_t + U_o h_{t-1} + V_0 C_t + B_0)~,
+   \label{output1}
+\end{equation}
+\begin{equation}
+    h_t = o_t * \tanh(C_t)~.
+\end{equation}
+
+In the interest of more efficient computation, the LSTM model used in this report is a slight variant from what is most commonly described \cite{Graves2012}. The activation of a particular memory cell's output gate doesn't depend on the memory cell's state. This has the result of taking $V_0 = 0$ in Equation.~\eqref{output1}.
+
+\subsubsection{LSTM implementation for anomaly detection}
+
+%disadvantges
+%ultimate 'black boxes'. Apart from defining the general archetecture of a network and perhaps initially seeding it with a random numbers, the user has no other role than to feed it input and watch it train and await the output. The final product of this activity is a trained network that provides no equations or coefficients defining a relationship (as in regression) beyond its own internal mathematics. The network 'IS' the final equation of the relationship.
+%tend to be slower to train than other types of networks and sometimes require thousands of epochs. If run on a truly parallel computer system this issue is not really a problem an ANN can capture many kinds of relationships it allows the user to quickly and relatively easily model phenomena which otherwise may have been very difficult or imposible to explain otherwise.
 
 \subsection{Rejected Methods of Anomaly Detection}
 This subsection will include the methods considered for anomaly detection and why they were ultimately rejected to show that a wide range were considered but only certain few were used to ensure quality in the analysis.

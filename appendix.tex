@@ -1,0 +1,296 @@
+\appendix
+%\counterwithin{figure}{section}
+\section{Appendices}
+\subsection{Meeting Minutes}
+
+\subsubsection*{Minutes for January 30, 2017}
+
+\textbf{Present:} 
+{S.~Bancroft,
+  A.~Bell,
+  D.~Eden,
+  J.~Farr,
+  R.~Mercer,
+  T.~Tzokov}
+  
+\large{Arduino Vs. NI DAQ}
+\begin{itemize}
+\item
+Sampling rate of 1500 Hz for contact mic. Chris said Arduino Probably doesn't have high enough sampling rate to deal with this.
+
+\item
+Use National Instruments DAQ box - don't need to worry about live processing with Arduino for now.
+
+\item
+Previous group said sampling at 150 Hz is adequate, but Chris said that's for us to determine by using as high sampling frequencies as possible.
+
+\item
+Stop using Arduino - use National Instruments DAQ.
+
+\item
+Could possibly propose Arduino for a final design, if we determine that its sampling rate is high enough. But use NI DAQ box for the analysis as this has much higher sampling rate.
+
+\item
+Not providing hardware for a project, simply finding out which methods/algorithms work for data analysis - so doesn't matter that we're using National Instruments.
+\end{itemize}
+
+\large{Further Experimental Work}
+\begin{itemize}
+\item
+Increase load on motor by placing rotor in water.
+
+\item
+Eliminate frequencies more than half the sampling frequency. Use low pass filter. 2nd or 4th order Butterworth filter to avoid aliasing.
+
+\item
+Should record data at higher sampling frequency than contact mic. Want to record at 3000 Hz or more to be more than twice the sampling frequency of the contact mic (Nyquist theorem).
+
+\item
+Overcharge a motor - see what happens when it gets close to failure.
+
+\item
+Data samples only need to be approximately 30 seconds long.
+
+\item
+How do you determine rotation speed of motor? - Place disk on end with hole and use a light gate to count rotations.
+
+\end{itemize}
+
+\large{Analysis}
+\begin{itemize}
+\item
+Neural networks
+
+\item
+Average power spectra to get smooth curve and plot it. See where frequency peaks.
+
+\item
+Use chi-squared fitting to fit a peak to the data with error bars - find FWHM (full-width-half-maximum) and peak hight etc.
+
+\item
+What are these measurements to good/bad motors. What is the `goodness' of fit for each parameter?
+
+\item
+Peak of frequency spectrum vs rotation speed of motor
+
+\item
+Goal is to return algorithms
+
+\item
+Try to quantify and understand data results before implementing neural networks.
+
+\item
+Contact Dr Hindmarch to get python data recording modules. Give continuous data acquisition using the national instruments DAQ box to give real time data.
+
+\end{itemize}
+
+\noindent\makebox[\linewidth]{\rule{0.7\textwidth}{0.4pt}} %\clearpage
+
+\subsubsection*{Minutes for February 6, 2017}
+
+\textbf{Present:} 
+{S.~Bancroft,
+  A.~Bell,
+  D.~Eden,
+  J.~Farr,
+  R.~Mercer,
+  T.~Tzokov}
+  
+\large{Recap}
+\begin{itemize}
+\item
+Taken data with increasing voltages to look at stress on motors. Sampling rate of 3000 Hz.
+
+\item
+Going to use a 3D-printed fan to increase load on a motor by placing fan in water.
+
+\item
+Used a light gate to measure motor frequency using a ``Rotary Encoder''.
+\end{itemize}
+
+\large{To Do Next}
+\begin{itemize}
+\item
+Should try measuring waveform of motor using lightgate and oscilloscope.
+
+\item
+Plot Lorentzian instead of Gaussian against peaks in fourier plots - better fit.
+
+\item
+Plot raw data against fitted function and also a function based on fitted parameters. Can assess if programming is correct and no mistakes are being made.
+
+\item
+Have y-displacement as a free parameter of the Lorentzian in case noise makes a base-level constant noise at all frequencies.
+
+\item
+Use chi-squared analysis on Lorentzian fitting.
+
+\item
+Use mechanical workshop to get metal cut with base and two sideplates to hold the motor.
+
+\item
+Find gear ratio of the motor.
+
+\end{itemize}
+
+\noindent\makebox[\linewidth]{\rule{0.7\textwidth}{0.4pt}} \clearpage
+
+\subsubsection*{Minutes for February 13, 2017}
+
+\textbf{Present:} 
+{S.~Bancroft,
+  A.~Bell,
+  D.~Eden,
+  J.~Farr,
+  R.~Mercer,
+  T.~Tzokov}
+  
+\large{Agenda}
+\begin{itemize}
+\item
+Low pass/high pass filters, finding peaks and fitting the data.
+
+\item
+Using the fans.
+
+\item
+Recording data using DAQ box, plotting results and using statistical analysis to analyse them.
+\end{itemize}
+
+\large{Notes}
+\begin{itemize}
+\item
+Make filter with software not hardware - more flexible and dynamic.
+
+\item
+Don't filter out noise when we don't know the cause - start taking data before motor runs to establish if noise appears with motor or if it's background. Quantify data before rejecting frequencies. Look at change in spectrum with and without motor running.
+
+\item
+Use ungeared motor with fan.
+
+\item
+See if spectrum degrades/peak widens with inducing failure.
+
+\item
+Take background into account when plotting Lorentzian.
+
+\item
+Bullet point sections of report.
+
+\item
+Potentially look at using a microphone as cheaper alternative if there is time.
+
+\item
+Fourier plot use semilog y-axis.
+\end{itemize}
+
+
+\large{To Do Next}
+\begin{itemize}
+\item
+Order the lightgate.
+
+\item
+Use thicker fans and take data from the changing load.
+
+\item
+Induce failures in different ways and get lots of data.
+\end{itemize}
+
+\noindent\makebox[\linewidth]{\rule{0.7\textwidth}{0.4pt}} \clearpage
+
+\subsubsection*{Minutes for February 20, 2017}
+
+\textbf{Present:} 
+{S.~Bancroft,
+  A.~Bell,
+  J.~Farr,
+  R.~Mercer,
+  T.~Tzokov}
+  
+\large{Notes}
+\begin{itemize}
+\item
+Look in both domains for statistical tests.
+
+\item
+Probability of false positives - Gaussian, probability per time scale (e.g. day).
+
+\item
+Table for anomaly detection methods.
+
+\item
+Citrus degreaser from bike shop for motors.
+
+%\item
+%Optimisation of code to give factor of 10 increase to speed.
+
+\end{itemize}
+
+
+\large{To Do Next}
+\begin{itemize}
+\item
+Let Chris know when Owen will come this week.
+
+\item
+Look at adding errors to Lorentzian.
+
+\item
+Look into damaging motor brushes.
+
+\item
+Order lead acid battery as alternative power supply, remember fuse and charger.
+
+\item
+Begin splitting up report and adding placeholder figures.
+
+\item
+Prepare PowerPoint with some graphs for meeting with Owen.
+\end{itemize}
+
+\noindent\makebox[\linewidth]{\rule{0.7\textwidth}{0.4pt}} %\clearpage
+\vspace{-5ex}
+\subsubsection*{Minutes for February 27, 2017}
+
+\textbf{Present:} 
+{S.~Bancroft,
+  A.~Bell,
+  D.~Eden,
+  J.~Farr,
+  R.~Mercer,
+  T.~Tzokov}
+  
+\large{Notes}
+\begin{itemize}
+\item
+Report deadline 17/03/17 (should be finished week prior to allow presentation practice).
+
+\item
+Owen to travel to Durham for 30 minute presentation 17/03/17 or when convenient for him.
+
+\end{itemize}
+
+\large{To Do Next}
+\begin{itemize}
+\item
+Leave the motor running once brushes have been sanded to observe if the motor repairs itself.
+
+\item
+Finish data collection in roughly 1.5 weeks time.
+
+\item
+Look for coincidence in anomaly metrics, scatter plot the anomaly metrics against each other and identify clusters.
+
+\item
+Present a description of a plot and an example to Chris later this week to verify we know what metrics are doing.
+
+\item
+Look into wind turbine failure modes, possible avenue of comparison.
+
+\item
+Organise a date for presentation with Prof. Chadwick, Chris and Owen.
+
+\end{itemize}
+
+\noindent\makebox[\linewidth]{\rule{0.7\textwidth}{0.4pt}} \clearpage
