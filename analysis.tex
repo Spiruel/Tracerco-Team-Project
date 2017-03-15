@@ -6,9 +6,10 @@
 A basic DC motor consists of a stator, a rotor, a commutator, an external magnetic field, brushes, bearings and a shaft. A DC power supply is connected across the brushes, transmitting power through the commutator into windings around the rotor. The current flowing through the windings interacts with the permanent magnetic field producing a Lorentz force, seen in Equation~\eqref{Lorentz} resulting in a torque across the windings.
 %reference lorentz
 \begin{equation}
-    F = I L \times B
+    F = I L \times B~.
     \label{Lorentz}
 \end{equation}
+where $F$ is the turning force, $I$ is the current through the wire and $B$ is the magnetic field strength.
 
 As the rotor spins away from a position with the windings perpendicular to the magnetic field, the torque is reduced. To allow a rotational force over the full revolution, commutators invert the current flow periodically. 
 
@@ -60,9 +61,27 @@ Mechanical components, such as the bearings, shaft or motor housing are prone to
     \label{fig:circuit_diagram}
 \end{figure}
 
+\begin{table}[]
+    \centering
+    \begin{tabular}{|p{1cm}|p{1cm}|p{10cm}|}
+    \hline
+    \textbf{Motor}          & \textbf{Motor Type}        & \textbf{Description}                                                                          \\ \hline
+    \multicolumn{1}{|l|}{A} & \multicolumn{1}{l|}{Ungeared} & 12 V motor used to test effects of load/overvoltage.                            \\
+    \multicolumn{1}{|l|}{B} & \multicolumn{1}{l|}{Geared} & 12 V motor with gear ratio 5/288. Used to test degradation of gears through rust/dirt. \\
+    \multicolumn{1}{|l|}{C} & \multicolumn{1}{l|}{Ungeared} & 5-15 V toy motor. Shaft bent to test rotor imbalance.                                \\
+    \multicolumn{1}{|l|}{D} & \multicolumn{1}{l|}{Ungeared}   & Motor heated to test overheating effect on coils.                          \\ \hline
+    \end{tabular}
+    \caption[Motor Descriptions]{Four different motors were used in our experiments. Here is a short description of their properties.}
+    \label{motor_table}
+\end{table}
+
+
+    
+The contact microphones \footnote{CM-01B Contact Microphone Datasheet: \url{http://docs-europe.electrocomponents.com/webdocs/142c/0900766b8142cdbe.pdf}} used are highly sensitive vibration sensors which record vibrations from 8 Hz to 2.2 kHz. This is done at a sampling rate of 1500 Hz which is a high enough frequency given the motors tested all had fundamental frequencies between 50 and 300 Hz. Three sensors were used for each reading and were placed on the x, y and z axes with x and y parallel to the shaft and z perpendicular. 
+
 The vibrational data collected by the contact microphones provided an analogue output, which when passed through a NI multifunction DAQ\footnote{NI USB-6009  Multifunction DAQ USB Device, Datasheet: \url{http://www.ni.com/datasheet/pdf/en/ds-218}}, could be converted and saved as a csv file. The circuit diagram showing the configuration of components is displayed in Figure.~\ref{fig:circuit_diagram}. This was produced using a Veroboard.
 
-The rotation speed of a motors shaft can provide a lot of information about the running health of a motor. Measurements of rotation speed can be obtained through the use of a rotary encoder (footnote style thing here) (maybe picture here? Take on Wednesday) which is fitted to the rotating shaft. The encoder is a composed of a codewheel and an emitter/detector module. As the disk spins, the apertures periodically block or allow the light to pass from the emitter to detector, converting the rotary shaft motion into a digital output. The rotary disk has three sections for varying level of accuracy, one channel outputs once per revolution, the other providing higher resolution with COUNT ROTARY ENCODER SLITS.
+The rotation speed of a motor's shaft can provide a lot of information about the running health of a motor. Measurements of rotation speed can be obtained through the use of a rotary encoder \footnote{Three Channel Optical Incremental Encoder, Datasheet: \url{https://www.broadcom.com/products/motion-control-encoders/incremental-encoders-code-wheels/aedb-9140-a14}} which is fitted to the rotating shaft. The encoder is a composed of a codewheel and an emitter/detector module. As the disk spins, the apertures periodically block or allow the light to pass from the emitter to detector, converting the rotary shaft motion into a digital output. The rotary disk has three sections for varying level of accuracy, one channel outputs once per revolution, the other providing higher resolution with 500 counts per revolution.
 
 The quadrature output of the rotary encoder allows monitoring of the shaft rotation speed with time, allowing investigation into certain failure modes such as slipping. This piece of equipment is relatively invasive compared to the contact microphones, as it requires fixing to the shaft, limiting space for operational output. 
 
@@ -92,7 +111,6 @@ Figure~\ref{fig:freq_large0V} shows the frequency spectra for a calibration test
 Figure.~\ref{fig:kmeans_large4V} shows the K-means reconstruction of a three second signal using training and testing data both from a baseline test run. The first three seconds of the baseline test run was used as training data and the second three seconds used as fitting data. This was done to check if the synthetic segments could be used to recreate a later section of the same baseline run with minimal reconstruction error. 
 
 \subsection{Overheating}
-%talk about snipped coils too to simulate each coil breaking separetly.
 
 Overheating is widely regarded as the most common cause of motor failures, with many other types of motor deterioration leading to overheating. This is such a substantial problem that a rise of just 10 $^o$C above the regular running temperature causes the life expectancy of the motor to halve. The life span is halved once again for every 10 $^o$C the temperature is raised further.
 
@@ -100,11 +118,14 @@ The problem arises as, during overheating, the varnish covering the metal wires 
 
 %(Gears Removed motor)
 
-In order to induce motor failure, a motor, shown in Figure.~\ref{fig:hotplate_motor}, consisting of 7 coils separately providing power was placed on a hotplate, heated to 150 $^o$C, for one hour. This was compared to the assumed usual running temperature of 60 $^o$C, meaning that just one hour on the hot plate equated to 512 hours of regular use.
+In order to induce motor failure, motor D (see Table.\ref{motor_table}), shown in Figure.~\ref{fig:hotplate_motor}, consisting of 7 coils separately providing power was placed on a hotplate, heated to 150 $^o$C, for one hour. This was compared to the assumed usual running temperature of 60 $^o$C, meaning that just one hour on the hot plate equated to 512 hours of regular use.
 
-For this failure mode, only coil was in direct contact with the plate so as only to damage that coil, leaving the others, ideally, with little impairment. Despite the fact that some heat would obviously be conducted through the motor, the effect of this was considered to be minimal with respect to the effect on the targeted coil.
+For this failure mode, only one coil was in direct contact with the plate so as only to damage that coil, leaving the others, ideally, with little impairment. Despite the fact that some heat would obviously be conducted through the motor, the effect of this was considered to be minimal with respect to the effect on the targeted coil.
 
 The result of just one coil being broken is that there would be a brief loss of power in the motor when this coil was in contact with the brushes. Therefore the speed of revolution would no longer be uniform. This can cause other problems to occur in the motor such as damage to the bearings. 
+
+In addition to this, the motor was placed in an oven at 200 $^o$C for 2 hours to cause extensive damage to all the coils evenly. This equates to over 30,000 hours of running in regular conditions. This was considered sufficient to bring the motor very close to failure given the typical life span of a 12 V motor is just 1000 hours. %1000???
+Data was then collected for one minute to find any lasting damage.
 
 In case this did not result in the targeted coil breaking entirely, a further experiment was devised that simulated this effect. To inhibit just one coil, one of the coils was cut. It was then observed that the rotation speed was not constant with no power being given to the motor for $({2}/{7})$ of the time - due to the fact that either of the two brushes could be in contact with the broken coil. Further coils were cut and the speed noted to become even more erratic until. Once four had been broken, the motor was unable to run at all as there was never a point where two brushes were in contact with working coils.
 
@@ -114,13 +135,10 @@ In case this did not result in the targeted coil breaking entirely, a further ex
     \label{fig:hotplate_motor}
 \end{figure}
 
-In addition to this, the motor was placed in an oven at 200 $^o$C for 2 hours to cause extensive damage to all the coils evenly. This equates to over 30,000 hours of running in regular conditions. This was considered sufficient to bring the motor very close to failure given the typical life span of a 12 V motor is just 1000 hours. %1000???
-Data was then collected for one minute to find any lasting damage.
-
 %Need references from papers for this
 
 
-\subsection{Overvoltage}
+\subsection{Overvoltage and Undervoltage}
 
 An increase in voltage will also cause an increase in current, resulting in more eddy currents in the wires and subsequently heating the motor. As stated earlier, this is a major reason for motor failures. 
 
@@ -137,17 +155,17 @@ In addition to the detrimental effect of overvoltaging, undervoltaging can be ju
 
 %12V motor
 
-The effect of overvoltaging  was investigated by running a 12 V motor at increasingly high voltages ranging from 12 V to 30 V. This was done for just one minute each time and was used to find the immediate effects of overvoltaging a motor.
+The effect of overvoltaging  was investigated by running motor B at increasingly high voltages ranging from 12 V to 30 V. This was done for just one minute each time and was used to find the immediate effects of overvoltaging a motor.
     
 %Large Motor
 
-A second motor, also with a regular operating voltage of 12 V, was run at 30 V for one hour. In this instance, the bearings reached 90 $^o$C; this demonstrates the extreme effects of overvoltaging a motor. Readings could not be taken during this run as the sensors are only able to operate %Need synonym
+A second motor, motor A, was run at 30 V for one hour. In this instance, the bearings reached 90 $^o$C; this demonstrates the extreme effects of overvoltaging a motor. Readings could not be taken during this run as the sensors are only able to operate %Need synonym
 up to 60 $^o$C. %Correct???
 Therefore, readings were taken before and after the one hour run. This allowed us to explore the long term effects of overvoltaging a motor.
 
 %Undervoltage experiment (large motor)
 
-In order to investigate the effects of undervoltaging a motor, data was collected when running a 12 V motor from 1 V through to 5 V, in 1 V instalments. The speed of rotation could be seen to be irregular, providing evidence that the rotor was slipping. This speed was taken using the rotary encoder, mentioned earlier.
+In order to investigate the effects of undervoltaging a motor, data was collected when running motor A from 1 V through to 5 V, in 1 V instalments. The speed of rotation could be seen to be irregular, providing evidence that the rotor was slipping. This speed was taken using the rotary encoder, mentioned earlier. %data?
 
 %Again need references.
 
@@ -163,16 +181,16 @@ The presence of a load puts a large amount of stress on the motor. As the motor 
         
 There are many ways of adding a load to a motor, but attaching a fan immersed in water was chosen due to the ability to vary the load through using fans of different widths (1 cm, 2 cm and 3 cm).
     
-Initially the test was done on a 12 V geared motor. A gear ratio of ${5}/{288}$ was found by counting the teeth of each cog and finding the speed of the connecting cog. This meant that the speed of the shaft, $\omega_1$, rotates at a much slower speed than the axle, $\omega _1$ as shown in Equation.~\eqref{eq:gear_Ratio}.
+Initially the test was done on motor B. A gear ratio of ${5}/{288}$ was found by counting the teeth of each cog and finding the speed of the connecting cog. This meant that the speed of the shaft, $\omega_1$, rotates at a much slower speed than the axle, $\omega _1$ as shown in Equation.~\eqref{eq:gear_ratio}.
 
 \begin{equation}
 \omega_1 = \frac{5}{288} \omega_2.
-\label{eq:gear_Ratio}
+\label{eq:gear_ratio}
 \end{equation}
 
 This increases the torque of the shaft and resulted in the motor being able to deal with a greater load. It was even able to run at 30 V for the thickest fan.
 
-A test was then conducted for another 12 V motor, this time ungeared. This time the motor could only reach a maximum of 4 V when the 1 cm fan was in use. This is evidence that as a load is added, a greater current is required to achieve a power that is large enough. A 10 A power supply was used for this experiment and this was the limiting factor, preventing the voltage from increasing further.
+A test was then conducted for motor A. This time the motor could only reach a maximum of 4 V when the 1 cm fan was in use. This is evidence that as a load is added, a greater current is required to achieve a power that is large enough. A 10 A power supply was used for this experiment and this was the limiting factor, preventing the voltage from increasing further.
 
 \subsection{Rotor Imbalance}
 As the rotor spins within the motor, it is important for the weight to be evenly distributed around the central axle. Any imbalance present can cause the rotor to shift in position toward the areas of concentrated mass. As a motor runs increased levels of vibrations are produced with the frequency of the vibrations matching the shaft rotation speed. This unnecessarily increases the stress on the bearings and, in extreme cases, this can cause contact between the rotor and the stator. This increased strain on the bearings causes a larger friction, not only reducing the efficiency of the motor but also damaging the bearings. This can lead to complicated maintenance operations that would be otherwise unnecessary for a properly aligned motor.
@@ -181,38 +199,83 @@ If there is contact between the rotor and stator, there is again an increase in 
 
 Some possible causes of an imbalanced motor include uneven wear through use, design or assembly errors, and an eccentricity of the rotor or any physical damage distorting components. Observing additional, unexpected frequencies could be due to an imbalance within the motor, and as such are a warning sign to the decline in health of the motor. 
 
-\begin{figure}
+%\begin{figure}
+%    \centering
+%    \includegraphics[trim={0cm, 15cm, 0cm, 8cm}, clip, width=0.5\textwidth]{bentshaft1.jpg}
+%    \caption[Misaligned Motor Shaft]{Small motor with misaligned shaft}
+%    \label{fig:bentshaft}
+%\end{figure}
+
+To simulate an imbalanced motor, the shaft of motor C was bent with varying severities. 
+%(See Figure.~\ref{fig:bentshaft}.) 
+As with all motors, it is impossible to attain a state of perfect balance, so small bends are expected in any initial baseline test. As the angle of the shaft from the normal was increased, the motors health deteriorated greatly. At large bends, the frictional force became so large that the motor required an initial force to start movement. This could represent a heavy contact between the rotor and the stator. 
+
+\begin{figure*}[t!]
     \centering
-    \includegraphics[trim={0cm, 15cm, 0cm, 8cm}, clip, width=0.5\textwidth]{bentshaft1.jpg}
-    \caption[Misaligned Motor Shaft]{Small motor with misaligned shaft}
-    \label{fig:bentshaft}
-\end{figure}
-
-To simulate an imbalanced motor, the shaft of a motor was bent with varying severities. (See Figure.~\ref{fig:bentshaft}.) As with all motors, it is impossible to attain a state of perfect balance, so small bends are expected in any initial baseline test. As the angle of the shaft from the normal was increased, the motors health deteriorated greatly. At large bends, the frictional force became so large that the motor required an initial force to start movement. This could represent a heavy contact between the rotor and the stator. 
-
-%Normally, unbalance will produce a 1x or shaft speed vibration that is 80 percent or more of the total vibration. If 1x vibration is less than 80 percent, suspect other problems in addition to the unbalance.
+    \begin{subfigure}[t]{0.5\textwidth}
+        \centering
+        \includegraphics[height=2.5in]{small_baseline.pdf}
+        \caption{Shaft aligned}
+    \end{subfigure}%
+    ~ 
+    \begin{subfigure}[t]{0.5\textwidth}
+        \centering
+        \includegraphics[height=2.5in]{small_misaligned_3.pdf}
+        \caption{Shaft misaligned}
+    \end{subfigure}
+    \caption[Fourier Plot Misaligned Shaft]{Fourier }
+\end{figure*}
 
 \subsection{Brush Damage}
 The brushes of a DC motor are a vital component, key to the proper working of the motor, allowing a DC power supply to provide an almost constant driving force throughout the entire revolution of the motor. The stationary brushes, combined with the rotating commutator attached to the rotor, periodically inverts the power supply throughout the revolutions. The commutator is composed of strips of conducting metal, usually copper, placed around the rotor. The strips of copper supply the current from the spring loaded brushes to the windings.  Without this periodic inversion of current direction through the windings, the motor would fail to spin and, as such, a good contact between the face of the brush and the commutator is necessary. 
 
-The main cause of damage to the brushes of a DC motor usually occurs during maintenance. The soft surfaces of the carbon brushes can be easily scratched if not handled correctly. It is also possible that dirt can enter the motor housing during operation, which if found between the brush and the commutator, can cause heavy damage. In order to induce this type of failure mode, the brushes were treated with a heavy grit sandpaper, leaving the surface very rough. (picture of rough brushes here). 
+The main cause of damage to the brushes of a DC motor usually occurs during maintenance. The soft surfaces of the carbon brushes can be easily scratched if not handled correctly. It is also possible that dirt can enter the motor housing during operation, which if found between the brush and the commutator, can cause heavy damage. In order to induce this type of failure mode, the brushes of motor A were treated with a heavy grit sandpaper, leaving the surface very rough, see Figure.~\ref{fig:brush_damage}
 
-It is possible for any imperfections in the surface of the carbon brushes to be removed without intervention during normal operation. As the rotor spins making contact with the face of the brushes, the friction generated is often capable of reducing the magnitude of the scratches. The possibility of this self repair will be investigated. However this friction of the brushes can cause another failure mode, loss of contact due to reduction in size of the brushes over time. This requires the brushes to be entirely replaced, making brushed motors unsuitable for use in remote locations. %more about self repair, what we did, e.g. left running for x volts for y time, more photos
+\begin{figure}[t]
+    \includegraphics[width=1.0\textwidth]{fig/brush_comparison.jpg}
+    \caption[Brush Damage]{Comparing the left and right brushes before and after deliberate manual damage.}
+    \label{fig:brush_damage}
+\end{figure}
 
-The rough contact between the brush and commutator when damaged can cause sparking, leading to damaged commutators. Replacing the brush on a motor is a relatively simple maintenance task, however replacing the copper strips of a commutator can be more complicated. It is therefore important to ensure that a motor running with damaged brushes is identified immediately, to prevent running in sub-optimal conditions, potentially causing further damage. (picture here of commutator on small 12 V motor, this motor has copper strips for brushes, not carbon, so famously “sparky”)
+It is possible for any imperfections in the surface of the carbon brushes to be removed without intervention during normal operation. As the rotor spins making contact with the face of the brushes, the friction generated is often capable of reducing the magnitude of the scratches. To investigate this, after the brushes had been damaged, the motor was operated for 30 minutes at 12 V to allow for the possibility of self repair. FROM ANALYSIS DID THIS WORK?
+
+The friction within the brushes can cause another failure mode, loss of contact due to reduction in size of the brushes over time. This requires the brushes to be entirely replaced, making brushed motors unsuitable for use in remote locations.
+
+The rough contact between the brush and commutator when damaged can cause sparking, leading to damaged commutators. Replacing the brush on a motor is a relatively simple maintenance task, however replacing the copper strips of a commutator can be more complicated. It is therefore important to ensure that a motor running with damaged brushes is identified immediately, to prevent running in sub-optimal conditions, potentially causing further damage
 
 Due to the flaws in the brushed DC motor model, their use has been declining with the introduction of brushless DC motors. These use an integrated switching power supply, to convert the DC to AC for the motor to run. Another alternative is to simply use an AC motor. 
+%hammer brush explanaion with picture if data shows it had any meaningfull effect?
 
 \subsection{Gear Damage}
 
-%First degreased the gears with a citrus degreasing spray.
-%Added dirt to cause gears to break and prevent easy movement.
-    %This can lead to overheating
-%Placed in water for a few days to cause the motor to rust
+\begin{figure*}[t!]
+    \centering
+    \begin{subfigure}[t]{0.5\textwidth}
+        \centering
+        \includegraphics[trim = {0 9cm 0 6cm}, clip, width=\textwidth]{Gears_Before.jpg}
+        \caption[Healthy Gears]{The gears of motor B before they were subject to any damage. Grease is visible on the cogs but no damage can be seen.}
+    \end{subfigure}%
+    ~ 
+    \begin{subfigure}[t]{0.5\textwidth}
+        \centering
+         \includegraphics[trim = {0 9cm 0 6cm}, clip, width=\textwidth]{Gears_After.jpg}
+    \caption[Damaged Gears]{The gears of motor B after they were degreased, placed in water and had mud added. Some rust can be seen on the top of each cog.}
+    \end{subfigure}
+    \caption[Motor Gears]{}
+\end{figure*}
 
-\subsection{Specific Failures}
+Gears are used to increase the torque of a motor so that it can take more load. The specific case relating rotation speeds for this motor is shown in Equation.~\eqref{eq:gear_ratio}.
 
-For testing purposed, to ensure that the various anomaly detection algorithms performed as expected, specific anomalies were induced. These included applying a force on the shaft, a routine of taps on the sensors or increasing and decreasing the voltage. The variations in frequencies induced by these actions are not found in a normal working motor, so the algorithm should detect these changes as anomalous. 
+The gears of a motor were damaged in ways so as to increase the friction inside the motor. This should raise the temperature of the motor, leading to overheating. One minute readings were taken before and after each seperate attempt to deteriorate the motor. 
+
+The first method used was to degrease the gears using citrus degreasing spray. This was done several times to ensure gears were thoroughly cleaned.
+
+They were then placed in water for 3 days so that they would rust.
+
+Finally dirt was then added. This was an attempt to not only prevent easy movement, but also break some of the teeth.
+
+After each of these tests, it was audible that the gears were deteriorating. 
+
 
 \subsection{Soft footing}
 
@@ -221,3 +284,7 @@ A motor running with soft footing can be the cause of multiple failures within a
 The cause of a soft footing can be either an imperfection in the mounting feet of the motor, or the foundations the motor is mounted upon. In either case the motor will have the ability to move in a diagonal plane, similar to a chair or table on uneven ground, causing the shaft to become misaligned. This can be avoided by properly aligning the mountings and the foundations, commonly performed in industry using laser precision tools. 
 
 This failure mode was induced by suspending the large motor above the work surface with a loosely gripped clamp stand. Any movement within the motor could cause a much larger movement in the stand, allowing the motor to oscillate while being suspended in the air. This oscillation will have an impact upon the shaft within the motor, exaggerating movements within the stator. The effects of this are similar to misalignment discussed above. Depending on the frequency of rotation of the motor, a resonance can occur, massively amplifying the oscillations causing an increased level of damage. If the feet do become loose, it is important to be aware of this before long term running of the motor is performed, as this would cause damage to internal components. It is more cost and energy effective to ensure proper footings prior to running.
+
+\subsection{Specific Failures}
+
+For testing purposed, to ensure that the various anomaly detection algorithms performed as expected, specific anomalies were induced. These included applying a force on the shaft, a routine of taps on the sensors or increasing and decreasing the voltage. The variations in frequencies induced by these actions are not found in a normal working motor, so the algorithm should detect these changes as anomalous. 

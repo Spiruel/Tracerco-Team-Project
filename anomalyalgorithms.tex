@@ -125,7 +125,7 @@ In this work, a data point was defined as anomalous if deviated from the median 
 Assuming that a data set is normally distributed, a simple threshold test on the residuals from the mean can be used to detect outliers. 
 Although a deviation of more than $3\sigma$ can in some cases be considered to be anomalous, there is still a $0.3\%$ chance of a data point following the normal distribution to fall more than $3\sigma$ from the mean. In some cases, the data sets analysed in this report can exceed $100,000$ entries. Using a $3\sigma$ threshold test in this case would lead to $300$ false positives. Alternatively, with a sampling rate of $3000$ Hz, this would equate to $9$ incorrect outlier alerts every second. 
 
-Instead, $5\sigma$ was used as the threshold for the residuals. The likelihood of a normal data point deviating from the mean by more than $5\sigma$ is $3 \times 10^{-7}$, giving a much lower false positive detection rate of one every $\sim 18$ minutes. 
+Instead, $5\sigma$ was used as the threshold for the residuals. The likelihood of a normal data point deviating from the mean by more than $5\sigma$ is $3 \times 10^{-7}$, giving a much lower false positive detection rate of one every $\sim18$ minutes. 
 
 Therefore for the purpose of this report, a data point deviating by more than $5\sigma$ from the mean is considered to be an anomaly. 
 
@@ -376,7 +376,7 @@ With the model initialised we define our first LSTM layer that behaves as a stan
 
 Dropout is a regularisation method, that when used correctly, greatly reduces overfitting in LSTMs \cite{2014arXiv1409.2329Z}. Dropout involves randomly removing units from the network during the training process \cite{2013arXiv1311.0701B}.
 
-An additional two layers are then added, again with a dropout of 20\%. For the last layer we choose a dense feedforward layer with a linear activation. We compile the model using a mean square error using the \texttt{rmsprop} gradient descent optimisation algorithm \cite{krause2016multiplicative}.
+An additional two layers are then added, again with a dropout of 20\%. For the last layer we choose a dense feedforward layer with a linear activation. We compile the model using a mean square error using the \texttt{rmsprop} gradient descent optimisation algorithm \cite{tieleman2012lecture}.
 
 LSTMs are proving the ultimate tool in modern-day time series forecasting and subsequent anomaly detection. However, as with any method, there are disadvantages.
 
