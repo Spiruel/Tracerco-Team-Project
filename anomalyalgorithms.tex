@@ -110,6 +110,17 @@ The Grubbs' test is useful in identifying if an outlier exists in the data set, 
 
 Nevertheless, it can be used as a very quick indication of whether results are anomalous in amplitude over time. If it indicates outliers are present, more rigorous statistical tests can be used to determined where and when outlier occurred. 
 
+\subsection{Median Absolute Deviation}
+
+The Median Absolute Deviation (MAD) is defined as the median of the residuals of a univariate data set, $\mathcal{X}$, from the median value of the data set \cite{rousseeuw1993alternatives},
+
+\begin{equation}
+    MAD = median~(|\mathcal{X}_i - median(\mathcal{X})|)~.
+    \label{eq:MAD}
+\end{equation}
+
+In this work, a data point was defined as anomalous if deviated from the median by more than $20 \times MAD$.
+
 \subsubsection{Standard Deviation Test}
 Assuming that a data set is normally distributed, a simple threshold test on the residuals from the mean can be used to detect outliers. 
 Although a deviation of more than $3\sigma$ can in some cases be considered to be anomalous, there is still a $0.3\%$ chance of a data point following the normal distribution to fall more than $3\sigma$ from the mean. In some cases, the data sets analysed in this report can exceed $100,000$ entries. Using a $3\sigma$ threshold test in this case would lead to $300$ false positives. Alternatively, with a sampling rate of $3000$ Hz, this would equate to $9$ incorrect outlier alerts every second. 
@@ -168,11 +179,11 @@ A Gaussian peak is defined by,
     \label{eq:gaussian}
 \end{equation}
 
-where $A$ is the amplitude of the Gaussian, equal to the maximum amplitude of the peak; $\sigma$ describes the width of the peak and is related to the full-width at half-maximum (FWHM) by $FHWM = 2\sigma \sqrt{2ln2}$, and $\mu$ is the frequency of the centre of the peak. The total area under the peak is given by $\sqrt{2\pi}\sigma A$.
+where $A$ is the amplitude of the Gaussian, equal to the maximum amplitude of the peak; $\sigma$ describes the width of the peak and is related to the full-width at half-maximum (FWHM) by FHWM = $2\sigma \sqrt{2ln2}$, and $\mu$ is the frequency of the centre of the peak. The total area under the peak is given by $\sqrt{2\pi}\sigma A$.
 
 Time series data from a "healthy" motor (one in which no possible faults have been purposefully imposed) were subdivided into segments and spectra obtained in all three motor axes. These were used to generate a set of Gaussians for the most prominent peak in each, each described by the three parameters $A$, $\sigma$ and $\mu$, defined above.
 
-Initially, baseline data was split into three second segments and a Fourier spectrum was obtained for each segment. A Gaussian curve was fitted to the most prominent peak in each spectrum. This was used to create a database of values for $A$, $\sigma$ and $\mu$ from each segment. From this, a mean and standard deviation (error) was obtained for $A$, $\sigma$ and $\mu$. 
+Initially, baseline data was split into three second segments and a Fourier spectrum was obtained for each segment. A Gaussian curve was fitted to the most prominent peak in each spectrum. This was used to create a database of values for $A$, $\sigma$ and $\mu$ from each segment. From this, a mean and standard error were obtained for $A$, $\sigma$ and $\mu$. 
 
 This process was then repeated for data that was recorded when trying to induce failures, in order to again determine values for $A$, $\sigma$ and $\mu$ with their respective errors. If any of $A$, $\sigma$ or $\mu$ do not agree within their errors with the values obtained from the "healthy" baseline data, then there is an indication that the frequency response of the motor is changing. This technique can be very useful in autonomously tracking the frequency response of a motor. As many failure modes can manifest themselves as gradual changes in the frequency of the motor, this technique can be useful for detecting signs of failure that the statistical tests applied to amplitudes in the time domain fail to identify. 
  
@@ -181,14 +192,13 @@ This process was then repeated for data that was recorded when trying to induce 
 \subsection{Least Squares Anomaly Detection}
 Included amongst the anomaly detection methods is a squared-loss objective function which is quick to detect anomalous data given a set of training and testing data sets. Due to the rudimentary nature of the function and the very simple analytical solution it has a speed advantage over other methods, as well as presenting an anomaly score across the train and test data to visualise the magnitude of the anomalous data points. It can also be used to evaluate the difference between sub-sequences and therefore isn't invalidated when the data set contains structural dependence.
 
-Initially a moving average was applied to the data to low pass it before median filtering. The class-conditional probability of the data point,  $p(y|\mathbf{x})$, was then determined for $p(y=i|\mathbf{x}, \mathbf{\theta_i})$ using equations $q(y=i|\mathbf{x}$, $\mathbf{\theta_i})$ for each $i \in \chi$, where $\chi = \{1, ...., c\}$ is the set of all possible classes. The model was fit using
+Initially a moving average was applied to the data to low pass it before median filtering. The class-conditional probability of the data point,  $p(y|\mathbf{x})$, was then determined for $p(y=i|\mathbf{x}, \mathbf{\theta_i})$ using equations $q(y=i|\mathbf{x}$, $\mathbf{\theta_i})$ for each $i \in \chi$, where $\chi = \{1, ...., c\}$ is the set of all possible classes. The model was fit using,
 
 \begin{equation}
-    J_i(\mathbf{\theta_i})=\dfrac{1}{2}\int(q(y=i|\mathbf{x},\mathbf{\theta_i}) - p(y=i|\mathbf{x}))^2p(\mathbf{x})d\mathbf{x}.
+    J_i(\mathbf{\theta_i})=\dfrac{1}{2}\int(q(y=i|\mathbf{x},\mathbf{\theta_i}) - p(y=i|\mathbf{x}))^2p(\mathbf{x})d\mathbf{x}~.
 \end{equation}
 
 Using the classes of data defined by the class-conditional probabilities of the data points we can determine the class-conditional probability of anomalous data by making similar assumptions to those made in a one-class support vector machine regarding the distribution in the test data relative to the classes used within the training data. Assumptions such as the outliers are restricted to exist in low-density data-space and, using the training data, a kernel model can describe high-density regions.
-
 
 \begin{itemize}
 \item Moving average
@@ -240,13 +250,13 @@ The centroids, being points in the defined 24-dimensional space, are themselves 
 
 \begin{figure}[t]
     \includegraphics[width=1.0\textwidth]{fig/kmeans_training.pdf}
-    \caption[K-means training segments]{A random selection of training segments, with windowing applied.}
+    \caption[K-means training segments]{A random selection of training segments used for the K-means method, with windowing applied.}
     \label{fig:kmeans_training}
 \end{figure}
 
 \begin{figure}[t]
     \includegraphics[width=1.0\textwidth]{fig/kmeans_synthetic.pdf}
-    \caption[K-means synthetic segments]{A random selection of synthetic segments, generated from the centroids of clusters.}
+    \caption[K-means synthetic segments]{A random selection of synthetic segments, generated from the centroids of clusters returned from the K-means method.}
     \label{fig:kmeans_synthetic}
 \end{figure}
 
@@ -265,12 +275,12 @@ The process creating a reconstruction of a waveform once the synthetic segments 
 \end{enumerate}
 
 
-Note that this reconstruction can be of a waveform different to the waveform used as training data. The signal waveform attempted to be reconstructed will henceforth be referred to as the "testing data". This allows for a method known as semi-supervised K-means reconstruction \cite{596afe3f2b5a4ff3b8f4f9793ad2f4ee}, in which synthetic segments are generated from baseline data, and then these segments can be used to create attempted reconstructions of data which was taken when trying induce failures. When the testing data differs from the training data however, a very important step is to multiply the testing data by a factor to ensure it has the same average amplitude as the training data - otherwise very large reconstruction errors will result.
+Note that this reconstruction can be of a waveform different to the waveform used as training data. The signal waveform attempted to be reconstructed will henceforth be referred to as the "testing data". This allows for a method known as supervised K-means reconstruction \cite{596afe3f2b5a4ff3b8f4f9793ad2f4ee}, in which synthetic segments are generated from baseline data, and then these segments can be used to create attempted reconstructions of data which was taken when trying induce failures. When the testing data differs from the training data however, a very important step is to multiply the testing data by a factor to ensure it has the same average amplitude as the training data - otherwise very large reconstruction errors will result.
 
 
 \begin{figure}[t]
     \includegraphics[width=1.0\textwidth]{fig/kmeans2.pdf}
-    \caption[K mean clustering plot]{Fancy figure goes here.}
+    \caption[K mean clustering plot]{An example of the K-means reconstruction method. The original signal (top) is reconstructed (middle) from a library of synthetic segments, generated from a set of training data from a "healthy" motor. The reconstruction error (bottom) is the difference between the reconstructed and original signal.}
     \label{fig:kmeanerror}
 \end{figure}
 
@@ -368,9 +378,13 @@ Dropout is a regularisation method, that when used correctly, greatly reduces ov
 
 An additional two layers are then added, again with a dropout of 20\%. For the last layer we choose a dense feedforward layer with a linear activation. We compile the model using a mean square error using the \texttt{rmsprop} gradient descent optimisation algorithm \cite{krause2016multiplicative}.
 
+LSTMs are proving the ultimate tool in modern-day time series forecasting and subsequent anomaly detection. However, as with any method, there are disadvantages.
+
+They can be described as the ultimate `black boxes'. This means that apart from setting up the general structure of a network and seeding its initial conditions, the operator of an LSTM has no other role than to supply and input, train the network, and await the output. The end product of this activity is a trained neural network that provides no relationship described with the use of an equation or set of coefficients beyond its internal mathematics. The network therefore \emph{is the final representation} of the relationship.
+
+Furthermore, LSTMs tend to slower to train than other types of neural networks. This can also be computationally intensive and time consuming.
+
 %disadvantges
-%ultimate 'black boxes'. Apart from defining the general archetecture of a network and perhaps initially seeding it with a random numbers, the user has no other role than to feed it input and watch it train and await the output. The final product of this activity is a trained network that provides no equations or coefficients defining a relationship (as in regression) beyond its own internal mathematics. The network 'IS' the final equation of the relationship.
-%tend to be slower to train than other types of networks and sometimes require thousands of epochs. If run on a truly parallel computer system this issue is not really a problem an ANN can capture many kinds of relationships it allows the user to quickly and relatively easily model phenomena which otherwise may have been very difficult or imposible to explain otherwise.
 %watch out for overfitting
 %More data is almost always better, because it helps fight overfitting.
 

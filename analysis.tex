@@ -104,8 +104,9 @@ In order to induce motor failure, a motor, shown in Figure.~\ref{fig:hotplate_mo
 
 For this failure mode, only coil was in direct contact with the plate so as only to damage that coil, leaving the others, ideally, with little impairment. Despite the fact that some heat would obviously be conducted through the motor, the effect of this was considered to be minimal with respect to the effect on the targeted coil.
 
-The result of just one coil being broken is that there would be a brief loss of power in the motor when this coil was in contact with the brushes.
-Therefore the speed of revolution would no longer be uniform. This can cause other problems to occur in the motor such as damage to the bearings.
+The result of just one coil being broken is that there would be a brief loss of power in the motor when this coil was in contact with the brushes. Therefore the speed of revolution would no longer be uniform. This can cause other problems to occur in the motor such as damage to the bearings. 
+
+In case this did not result in the targeted coil breaking entirely, a further experiment was devised that simulated this effect. To inhibit just one coil, one of the coils was cut. It was then observed that the rotation speed was not constant with no power being given to the motor for $({2}/{7})$ of the time - due to the fact that either of the two brushes could be in contact with the broken coil. Further coils were cut and the speed noted to become even more erratic until. Once four had been broken, the motor was unable to run at all as there was never a point where two brushes were in contact with working coils.
 
 \begin{figure}[t]
     \includegraphics[width=1.0\textwidth]{fig/Gears_Removed_Inside.JPG}
@@ -113,7 +114,7 @@ Therefore the speed of revolution would no longer be uniform. This can cause oth
     \label{fig:hotplate_motor}
 \end{figure}
 
-In addition to this, the motor was placed in an oven at 200 $^o$C for 2 hours to cause extensive damage to all the coils evenly. This equates to over 30,000 hours of running in regular conditions. This was considered sufficient to bring the motor very close to failure given the typical life span of a motor is just 1000 hours. %1000???
+In addition to this, the motor was placed in an oven at 200 $^o$C for 2 hours to cause extensive damage to all the coils evenly. This equates to over 30,000 hours of running in regular conditions. This was considered sufficient to bring the motor very close to failure given the typical life span of a 12 V motor is just 1000 hours. %1000???
 Data was then collected for one minute to find any lasting damage.
 
 %Need references from papers for this
@@ -123,8 +124,7 @@ Data was then collected for one minute to find any lasting damage.
 
 An increase in voltage will also cause an increase in current, resulting in more eddy currents in the wires and subsequently heating the motor. As stated earlier, this is a major reason for motor failures. 
 
-Moreover, overvoltaging causes the torque of the motor to increase. The subsequent increased rotation speed leads to the motor %Which Part??? 
-slipping. In order to reduce this slip, the motor will then draw an even greater current further contributing to the overheating effect. As well as this, a greater rotation speed will increase friction and will wear down bearings and brushes. Just a small increase in voltage can result in a large amount of damage as,
+Moreover, overvoltaging causes the torque of the motor to increase. The subsequent increased rotation speed leads to the rotor slipping. In order to reduce this slip, the motor will then draw an even greater current further contributing to the overheating effect. As well as this, a greater rotation speed will increase friction and will wear down bearings and brushes. Just a small increase in voltage can result in a large amount of damage as,
 
 \begin{equation}
 \tau \propto V^2,
@@ -147,9 +147,7 @@ Therefore, readings were taken before and after the one hour run. This allowed u
 
 %Undervoltage experiment (large motor)
 
-In order to investigate the effects of undervoltaging a motor, data was collected when running a 12 V motor from 1 V through to 5 V, in 1 V instalments. 
-
-%Undervoltage: talk about rotary encoder and how not constant rotation speed
+In order to investigate the effects of undervoltaging a motor, data was collected when running a 12 V motor from 1 V through to 5 V, in 1 V instalments. The speed of rotation could be seen to be irregular, providing evidence that the rotor was slipping. This speed was taken using the rotary encoder, mentioned earlier.
 
 %Again need references.
 
@@ -201,7 +199,7 @@ The main cause of damage to the brushes of a DC motor usually occurs during main
 
 It is possible for any imperfections in the surface of the carbon brushes to be removed without intervention during normal operation. As the rotor spins making contact with the face of the brushes, the friction generated is often capable of reducing the magnitude of the scratches. The possibility of this self repair will be investigated. However this friction of the brushes can cause another failure mode, loss of contact due to reduction in size of the brushes over time. This requires the brushes to be entirely replaced, making brushed motors unsuitable for use in remote locations. %more about self repair, what we did, e.g. left running for x volts for y time, more photos
 
-The rough contact between the brush and commutator when damaged can cause sparking, leading to damaged commutators. Replacing the brush on a motor is a relatively simple maintenance task, however replacing the copper strips of a commutator can be more complicated. It is therefore important to ensure that a motor running with damaged brushes is identified immediately, to prevent running in sub-optimal conditions, potentially causing further damage. (picture here of commutator on small 12V motor, this motor has copper strips for brushes, not carbon, so famously “sparky”)
+The rough contact between the brush and commutator when damaged can cause sparking, leading to damaged commutators. Replacing the brush on a motor is a relatively simple maintenance task, however replacing the copper strips of a commutator can be more complicated. It is therefore important to ensure that a motor running with damaged brushes is identified immediately, to prevent running in sub-optimal conditions, potentially causing further damage. (picture here of commutator on small 12 V motor, this motor has copper strips for brushes, not carbon, so famously “sparky”)
 
 Due to the flaws in the brushed DC motor model, their use has been declining with the introduction of brushless DC motors. These use an integrated switching power supply, to convert the DC to AC for the motor to run. Another alternative is to simply use an AC motor. 
 
