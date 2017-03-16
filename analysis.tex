@@ -90,11 +90,11 @@ In order to determine which frequency components were from the motors and what w
 
 \begin{figure}[t]
     \includegraphics[width=1.0\textwidth]{fig/freq_large_0V.pdf}
-    \caption[Calibration Frequency 1]{The Fourier spectra in the x, y, and z axes for the large motor at 0V.}
+    \caption[Calibration Frequency 1]{The Fourier spectra in the x, y, and z axes for Motor A at 0 V.}
     \label{fig:freq_large0V}
 \end{figure}
 
-Figure.~\ref{fig:freq_large0V} shows the frequency spectra for a calibration test with the large motor. 
+Figure.~\ref{fig:freq_large0V} shows the frequency spectra for a calibration test with Motor A. 
 
 This peak was originally attributed to ambient sounds in the lab, however repeat measurements were conducted with the microphones not powered and the peaks still persisted. This indicates that the source of the noise is from the DAQ box or electronics. 
 
@@ -104,7 +104,7 @@ The position of this peak appeared to vary randomly between approximately 300 an
 
 \begin{figure}[t]
     \includegraphics[width=1.0\textwidth]{fig/kmeans_large_4Vnowater.pdf}
-    \caption[K-means Large Motor Reconstruction No Water]{K-means reconstruction applied to three seconds of data from large motor running at 4 V. Top: the original testing data. Middle: the reconstruction using K-means. Bottom: the reconstruction error between the reconstructed and original signal.}
+    \caption[K-means Large Motor Reconstruction No Water]{K-means reconstruction applied to three seconds of data from Motor A running at 4 V. Top: the original testing data. Middle: the reconstruction using K-means. Bottom: the reconstruction error between the reconstructed and original signal.}
     \label{fig:kmeans_large4V}
 \end{figure}
 
@@ -166,6 +166,21 @@ In case this did not result in the targeted coil breaking entirely, a further ex
 
 %after one winding is snipped completely, fourier spectrum is similar to baseline, but with peak frequency lower - peaking at about 10 Hz. Gaussian couldn't be fit as the peak was so close to 0 Hz, it didn't recognise it as a peak.
 
+\begin{table}[]
+\centering
+\begin{tabular}{c|p{1.45cm}p{1.25cm}p{1.3cm}|p{1.2cm}p{1.2cm}p{1.3cm}|p{1.45cm}p{1.25cm}p{1.15cm}}
+  & \multicolumn{3}{c|}{Baseline}                    & \multicolumn{3}{c|}{Hotplate}    \cline{2-10}            & \multicolumn{3}{c}{Winding Snipped}           \\ \cline{2-10} 
+  & $A$            & $\mu$      & $\sigma$ & $A$           & $\mu$   & $\sigma$ & $A$               & $\mu$   & $\sigma$ \\ \hline
+x & $27.2 \pm 0.8$ & $61 \pm 6$      & $8.1 \pm 0.5$ & $7.7 \pm 0.3$ & $966 \pm 9$  & $6.9 \pm 0.3$ & $4 \pm 3$         & $680 \pm 20$ & $11 \pm 1$ \\
+y & $27.6 \pm 0.8$ & $52.3 \pm 0.5 $ & $8.5 \pm 0.5$ & $49 \pm 4$    & $320 \pm 4$  & $6.2 \pm 0.2$ & $4 \pm 3$         & $680 \pm 20$ & $10 \pm 1$ \\
+z & $8.3 \pm 0.3$  & $673 \pm 33$    & $6.6 \pm 0.2$ & $13 \pm 13$   & $1172 \pm 5$ & $100 \pm 90$  & $0.069 \pm 0.007$ & $703 \pm 5$  & $12 \pm 2$
+\end{tabular}
+\label{overheating_table}
+\caption[Gaussian Fit Parameters for Overheating]{Gaussian fit parameters for the most prominent peak in the Fourier spectrum, in the x, y and z axes of the motor. Parameters are returned for a baseline run, after one of the coils was placed on a hotplate, and when one of the coils was completely snipped. The units of $A$ are $10^{-3}$V$^2$ H$^{-1}$ and the units of $\mu$ and $\sigma$ are Hz.}
+\end{table}
+
+Table.~\ref{overheating_table} shows the parameters returned when minimising a Gaussian fit to the most prominent peak in each axis. 
+
 
 \subsection{Overvoltage and Undervoltage}
 
@@ -210,7 +225,7 @@ In order to investigate the effects of undervoltaging a motor, data was collecte
 
 \begin{figure}[t]
     \includegraphics[width=1.0\textwidth]{fig/large_1V_nowater_large_12V.pdf}
-    \caption[Undervoltage of Large Motor]{Waveform for the large motor running at 1V, significantly below optimum voltage. Anomaly detection trained against 12 V baseline data, assumed to be the motor's optimum working conditions.}
+    \caption[Undervoltage of Large Motor]{Waveform for Motor A running at 1 V, significantly below optimum voltage. Anomaly detection trained against 12 V baseline data, assumed to be the motor's optimum working conditions.}
     \label{fig:largemotor_1V}
 \end{figure}
 
@@ -223,13 +238,13 @@ Each index within the data on which anomalous results are flagged up seem to be 
 
 \begin{figure}[t]
     \includegraphics[width=1.0\textwidth]{fig/large_30V_large_12V.pdf}
-    \caption[Overvoltage of Large Motor]{Waveform in the x axis for the large motor running at 30 V, significantly above optimum voltage. K-means was trained against 12 V baseline data, assumed to be the motor's optimum working condition.}
+    \caption[Overvoltage of Large Motor]{Waveform in the x axis for Motor A running at 30 V, significantly above optimum voltage. K-means was trained against 12 V baseline data, assumed to be the motor's optimum working condition.}
     \label{fig:largemotor_30V}
 \end{figure}
 
 %NEED TO TALK ABOUT OVERVOLTAGE HERE
 %Apparently motor voltage fluctuated as motor got hot. This very nicely shows how amplitude gradually increases towards end, and is found by the majority of time domain anomaly detection methods. 
-Figure.~\ref{fig:largemotor_30V} displays the effects of running the motor far above the optimum voltage of 12V. The voltage fluctuated toward the end of the testing data due to overheating of the motor, but was originally set at 30V. It clearly shows anomalous data corresponding with the heating of the motor as a direct result of over-voltage. Most time domain anomaly detection methods flagged these results with K Means Cluster detecting both before and after the Five Sigma test. This shows a clear advantage of using the K Means Cluster method as if the motor was switched off immediately as the first few anomalies were detected by the K Means Cluster test, the motor would not continue to operate at such high temperatures and fluctuating voltages which would potentially damage the motor.
+Figure.~\ref{fig:largemotor_30V} displays the effects of running the motor far above the optimum voltage of 12V. The voltage fluctuated toward the end of the testing data due to overheating of the motor, but was originally set at 30 V. It clearly shows anomalous data corresponding with the heating of the motor as a direct result of over-voltage. Most time domain anomaly detection methods flagged these results with K Means Cluster detecting both before and after the Five Sigma test. This shows a clear advantage of using the K Means Cluster method as if the motor was switched off immediately as the first few anomalies were detected by the K Means Cluster test, the motor would not continue to operate at such high temperatures and fluctuating voltages which would potentially damage the motor.
 
 \subsection{Load}
 
@@ -253,11 +268,11 @@ A test was then conducted for motor A. This time the motor could only reach a ma
 
 \begin{figure}[t]
     \includegraphics[width=1.0\textwidth]{fig/large_4V-9A_water_large_12V.pdf}
-    \caption[Anomaly Plot Large Motor under Load]{Waveform for the large motor running under applied load from water bucket at 4 V. Anomaly detection trained against 12 V baseline data, assumed to be the motor's optimum working conditions.}
+    \caption[Anomaly Plot Large Motor under Load]{Waveform for Motor A running under applied load from water bucket at 4 V. Anomaly detection trained against 12 V baseline data, assumed to be the motor's optimum working conditions.}
     \label{fig:largemotor_water4V}
 \end{figure}
 
-Figure.~\ref{fig:largemotor_water4V} shows the anomaly tests being applied to data recorded when the large motor was running under an applied load.
+Figure.~\ref{fig:largemotor_water4V} shows the anomaly tests being applied to data recorded when Motor A was running under an applied load.
 
 The standard deviation from moving average test looks at more short term changes along the time series. The algorithm involved calculates the mean and standard deviation of a `chunk' of data, and evaluates novelties in the data on a more local level. Larger spikes at the 30 second mark in Figure.~\ref{fig:largemotor_water4V} has meant that the fluctuations the test identified as anomalies are not visible.
 
@@ -332,7 +347,7 @@ Due to the flaws in the brushed DC motor model, their use has been declining wit
 
 \begin{figure}[t]
     \includegraphics[width=1.0\textwidth]{fig/large_manual_repair_large_12V.pdf}
-    \caption[Anomaly Test Brush Damage]{The waveform in the x axis for the large motor after brush damage, showing the process of self-repair.}
+    \caption[Anomaly Test Brush Damage]{The waveform in the x axis for Motor A after brush damage, showing the process of self-repair.}
     \label{fig:largemotor_brushdamage}
 \end{figure}
 
@@ -417,7 +432,7 @@ This failure mode was induced by suspending motor A above the work surface with 
 
 \begin{figure}[t]
     \includegraphics[width=1.0\textwidth]{fig/large_unlevel_large_12V.pdf}
-    \caption[Anomaly Tests Large Motor Uneven Footing]{The waveform for the large motor in the x axis with soft footing. Anomaly detection for K-means trained against 12 V baseline data, which was assumed to be the motor's optimum working conditions.}
+    \caption[Anomaly Tests Large Motor Uneven Footing]{The waveform for the Motor A in the x axis with soft footing. Anomaly detection for K-means trained against 12 V baseline data, which was assumed to be the motor's optimum working conditions.}
     \label{fig:large_uneven_footing}
 \end{figure}
 
@@ -435,7 +450,7 @@ This failure mode was induced by suspending motor A above the work surface with 
         \centering
         \includegraphics[height=2.5in]{freq_large_unlevel.pdf}
     \end{subfigure}
-    \caption[Fourier Plot Soft Footing]{Fourier spectrum for the large motor. Left: baseline data in which motor was run at 12 V, which is assumed to be optimum running conditions. Right: large motor with soft footing, simulated by suspending the motor within a loosely gripped clamp stand. }
+    \caption[Fourier Plot Soft Footing]{Fourier spectrum for Motor A. Left: baseline data in which motor was run at 12 V, which is assumed to be optimum running conditions. Right: Motor A with soft footing, simulated by suspending the motor within a loosely gripped clamp stand. }
     \label{soft_footing}
 \end{figure*}
 
@@ -456,6 +471,8 @@ For testing purposes, to ensure that the various anomaly detection algorithms pe
     \caption[Specific Anomaly Test]{The waveform and detected anomalies in the x axis for the 12 V motor, with motors purposefully tapped at 30 seconds and voltage increased towards the end, in order to test the reliability of the anomaly detection methods being implemented.}
     \label{fig:spec_anom1}
 \end{figure}
+
+The detection of the obvious anomalous data by K-means, five sigma and median absolute deviation in Figure.~\ref{fig:spec_anom1} exhibits reliability in these particular methods. A point to note however is that K-means did not detect any anomalies as the voltage increases toward the end of the data set. This could be resolved by looking at the data within the fourier domain to check if the anomaly detection methods including K-means detected the anomalies. Also, standard deviation from moving average did not manage to detect all of the obvious signs of anomalous data but did flag up the increasing voltage toward the end of the data. This shows a definitive advantage of using more than one anomaly detection method at once - that is to ensure that no single method misses an anomaly and the engine is damaged as a result.
 
 %Talk about reliability of methods in finding anomalies. K-means doesn't find the increasing voltage at the end - perhaps showing important of fourier spectra for certain cases. 
 
