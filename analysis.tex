@@ -1,14 +1,15 @@
 \section{Analysis of Motor Data}
 \label{sec:analysis}
 
-\subsection{Motor components and setup}
+\subsection{Motor Components and Setup}
 
-A basic DC motor consists of a stator, a rotor, a commutator, an external magnetic field, brushes, bearings and a shaft. A DC power supply is connected across the brushes, transmitting power through the commutator into windings around the rotor. The current flowing through the windings interacts with the permanent magnetic field producing a Lorentz force, seen in Equation~\eqref{Lorentz} resulting in a torque across the windings.
+A basic DC motor consists of a stator, a rotor, a commutator, an external magnetic field, brushes, bearings and a shaft. A DC power supply is connected across the brushes, transmitting power through the commutator into windings around the rotor. The current flowing through the windings interacts with the permanent magnetic field producing a Lorentz force, resulting in a torque across the windings,
 %reference lorentz
 \begin{equation}
     F = I L \times B~.
     \label{Lorentz}
 \end{equation}
+
 where $F$ is the turning force, $I$ is the current through the wire and $B$ is the magnetic field strength.
 
 As the rotor spins away from a position with the windings perpendicular to the magnetic field, the torque is reduced. To allow a rotational force over the full revolution, commutators invert the current flow periodically. 
@@ -57,7 +58,7 @@ Mechanical components, such as the bearings, shaft or motor housing are prone to
     (8,1) to[short] node[ground] {} (8,-3)
     ;
     \end{circuitikz}
-    \caption[Sensor circuit board]{The circuit required to convert data recorded by the contact microphones from an anologue output to digital so that it can accessed by the National instruments DAQ box.}
+    \caption[Sensor circuit board]{The circuit required to record data. Vibrations recorded by the contact microphones from an analogue output, convert to digital using a National instruments DAQ box.}
     \label{fig:circuit_diagram}
 \end{figure}
 
@@ -71,20 +72,17 @@ Mechanical components, such as the bearings, shaft or motor housing are prone to
     \multicolumn{1}{|l|}{C} & \multicolumn{1}{l|}{Ungeared} & 5-15 V toy motor. Shaft bent to test rotor imbalance.                                \\
     \multicolumn{1}{|l|}{D} & \multicolumn{1}{l|}{Ungeared}   & Motor heated to test overheating effect on coils.                          \\ \hline
     \end{tabular}
-    \caption[Motor Descriptions]{Four different motors were used in our experiments. Here is a short description of their properties.}
+    \caption[Motor Descriptions]{All four different motors that were used in experiments, alongside a short description of their properties.}
     \label{motor_table}
 \end{table}
 
-
-    
 The contact microphones \footnote{CM-01B Contact Microphone Datasheet: \url{http://docs-europe.electrocomponents.com/webdocs/142c/0900766b8142cdbe.pdf}} used are highly sensitive vibration sensors which record vibrations from 8 Hz to 2.2 kHz. This is done at a sampling rate of 1500 Hz which is a high enough frequency given the motors tested all had fundamental frequencies between 50 and 300 Hz. Three sensors were used for each reading and were placed on the x, y and z axes with x and y parallel to the shaft and z perpendicular. 
 
 The vibrational data collected by the contact microphones provided an analogue output, which when passed through a NI multifunction DAQ\footnote{NI USB-6009  Multifunction DAQ USB Device, Datasheet: \url{http://www.ni.com/datasheet/pdf/en/ds-218}}, could be converted and saved as a csv file. The circuit diagram showing the configuration of components is displayed in Figure.~\ref{fig:circuit_diagram}. This was produced using a Veroboard.
 
-The rotation speed of a motor's shaft can provide a lot of information about the running health of a motor. Measurements of rotation speed can be obtained through the use of a rotary encoder \footnote{Three Channel Optical Incremental Encoder, Datasheet: \url{https://www.broadcom.com/products/motion-control-encoders/incremental-encoders-code-wheels/aedb-9140-a14}} which is fitted to the rotating shaft. The encoder is a composed of a codewheel and an emitter/detector module. As the disk spins, the apertures periodically block or allow the light to pass from the emitter to detector, converting the rotary shaft motion into a digital output. The rotary disk has three sections for varying level of accuracy, one channel outputs once per revolution, the other providing higher resolution with 500 counts per revolution.
+The rotation speed of a motor's shaft can provide a lot of information about the running health of a motor. Measurements of rotation speed can be obtained through the use of a rotary encoder \footnote{Three Channel Optical Incremental Encoder, Datasheet: \url{https://www.broadcom.com/products/motion-control-encoders/incremental-encoders-code-wheels/aedb-9140-a14}} which is fitted to the rotating shaft. The encoder is a composed of a codewheel and an emitter/detector module. As the disk spins, the apertures periodically block or allow the light to pass from the emitter to detector, converting the rotary shaft motion into a digital output. The rotary disk has three sections for varying level of accuracy, one channel outputs once per revolution, the others providing higher resolution with 500 counts per revolution.
 
 The quadrature output of the rotary encoder allows monitoring of the shaft rotation speed with time, allowing investigation into certain failure modes such as slipping. This piece of equipment is relatively invasive compared to the contact microphones, as it requires fixing to the shaft, limiting space for operational output. 
-
 
 \subsection{Calibration Tests}
 
@@ -96,7 +94,7 @@ In order to determine which frequency components were from the motors and what w
     \label{fig:freq_large0V}
 \end{figure}
 
-Figure~\ref{fig:freq_large0V} shows the frequency spectra for a calibration test with the large motor. 
+Figure.~\ref{fig:freq_large0V} shows the frequency spectra for a calibration test with the large motor. 
 
 ----write more
 
@@ -112,9 +110,11 @@ Figure.~\ref{fig:kmeans_large4V} shows the K-means reconstruction of a three sec
 
 \subsection{Overheating}
 
-Overheating is widely regarded as the most common cause of motor failures, with many other types of motor deterioration leading to overheating. This is such a substantial problem that a rise of just 10 $^o$C above the regular running temperature causes the life expectancy of the motor to halve. The life span is halved once again for every 10 $^o$C the temperature is raised further.
+\subsubsection{Description of Failure Mode}
 
-The problem arises as, during overheating, the varnish covering the metal wires begins to melt. If this occurs at two points of wires that are in contact, the coil of the motor can short circuit.
+Overheating is widely regarded as the most common cause of motor failures, with many other types of motor deterioration leading to overheating. This is such a substantial problem that a rise of just 10 $^o$C above the regular running temperature causes the life expectancy of the motor to halve. The life span is halved once again for every 10 $^o$C the temperature is raised further.%ref?
+
+The problem arises as, during overheating, the varnish covering the metal wires begins to melt \cite{wagner1993effects}. If this occurs at two points of wires that are in contact, the coil of the motor can short circuit.
 
 %(Gears Removed motor)
 
@@ -127,7 +127,7 @@ The result of just one coil being broken is that there would be a brief loss of 
 In addition to this, the motor was placed in an oven at 200 $^o$C for 2 hours to cause extensive damage to all the coils evenly. This equates to over 30,000 hours of running in regular conditions. This was considered sufficient to bring the motor very close to failure given the typical life span of a 12 V motor is just 1000 hours. %1000???
 Data was then collected for one minute to find any lasting damage.
 
-In case this did not result in the targeted coil breaking entirely, a further experiment was devised that simulated this effect. To inhibit just one coil, one of the coils was cut. It was then observed that the rotation speed was not constant with no power being given to the motor for $({2}/{7})$ of the time - due to the fact that either of the two brushes could be in contact with the broken coil. Further coils were cut and the speed noted to become even more erratic until. Once four had been broken, the motor was unable to run at all as there was never a point where two brushes were in contact with working coils.
+In case this did not result in the targeted coil breaking entirely, a further experiment was devised that simulated this effect. To inhibit just one coil, one of the coils was cut. It was then observed that the rotation speed was not constant with no power being given to the motor for $({2}/{7})$ of the time - due to the fact that neither of the two brushes could be in contact with the broken coil. Further coils were cut and the speed was noted to become even more erratic until. Once four had been broken, the motor was unable to run at all as there was never a point where two brushes were in contact with working coils.
 
 \begin{figure}[t]
     \includegraphics[width=1.0\textwidth]{fig/Gears_Removed_Inside.JPG}
@@ -137,10 +137,20 @@ In case this did not result in the targeted coil breaking entirely, a further ex
 
 %Need references from papers for this
 
+\subsubsection{Application of Anomaly Detection}
+
+%time domain tests don't show any anomaly detections for hot plate - talk about fourier.
+
+
+%time domain detect anomalies for oven but very few
+
+%I will make fourier plots and talk about these for this section as there seems to be a bigger change in the fourier spectra. 
+
 
 \subsection{Overvoltage and Undervoltage}
 
-An increase in voltage will also cause an increase in current, resulting in more eddy currents in the wires and subsequently heating the motor. As stated earlier, this is a major reason for motor failures. 
+\subsubsection{Description of Failure Mode}
+An increase in voltage will also cause an increase in current, resulting in more Eddy currents in the wires and subsequently heating the motor. As stated earlier, this is a major reason for motor failures. 
 
 Moreover, overvoltaging causes the torque of the motor to increase. The subsequent increased rotation speed leads to the rotor slipping. In order to reduce this slip, the motor will then draw an even greater current further contributing to the overheating effect. As well as this, a greater rotation speed will increase friction and will wear down bearings and brushes. Just a small increase in voltage can result in a large amount of damage as,
 
@@ -165,18 +175,45 @@ Therefore, readings were taken before and after the one hour run. This allowed u
 
 %Undervoltage experiment (large motor)
 
-In order to investigate the effects of undervoltaging a motor, data was collected when running motor A from 1 V through to 5 V, in 1 V instalments. The speed of rotation could be seen to be irregular, providing evidence that the rotor was slipping. This speed was taken using the rotary encoder, mentioned earlier. %data?
+In order to investigate the effects of undervoltaging a motor, data was collected when running motor A from 1 V through to 5 V, in 1 V instalments. The speed of rotation could be seen to be irregular, providing evidence that the rotor was slipping. This speed was taken using the rotary encoder, as mentioned earlier. %data?
 
 %Again need references.
 
-\subsection{Load}
+\subsubsection{Application of Anomaly Detection}
+
+%COMMENTED OUT TO ONLY TALK ABOUT ONE FIGURE
+%\begin{figure}[t]
+%    \includegraphics[width=1.0\textwidth]{fig/large_2V_nowater_large_12V.pdf}
+%    \caption[Undervoltage of Large Motor1]{Waveform for the large motor running at 2V, significantly below optimum voltage.}
+%    \label{fig:largemotor_2V}
+%\end{figure}
 
 \begin{figure}[t]
-    \includegraphics[width=1.0\textwidth]{fig/kmeans_large_4Vwater.pdf}
-    \caption[K-means Large Motor Reconstruction In Water]{K-means reconstruction applied to three seconds of data from large motor running at 4V under a load applied through a fan and a bucket of water. Top: the original testing data. Middle: the reconstruction using K-means. Bottom: the reconstruction error between the reconstructed and original signal.}
-    \label{fig:kmeans_large4Vwater}
+    \includegraphics[width=1.0\textwidth]{fig/large_1V_nowater_large_12V.pdf}
+    \caption[Undervoltage of Large Motor2]{Waveform for the large motor running at 1V, significantly below optimum voltage. Anomaly detection trained against 12 V baseline data, assumed to be the motor's optimum working conditions.}
+    \label{fig:largemotor_1V}
 \end{figure}
 
+%refer in the text that when this test is tested against baseline data, it doesn't return any anomalies therefore this undervoltage is the thing causing the anomalies. all anomaly method detected the anomalies. EXCEPT from stdev_from_mov_av. WHY? which anomaly detection caught is sooner? zoom in it could potentially be something to ask jake and rob more, what could be the physical reason of these spikes when it's being unvoltaged.
+When the anomaly detection methods were tested against the baseline data for the 12 V motor, no method detected any anomalous data points within the set. Therefore one can assume that on the test data presented in Figure.~\ref{fig:largemotor_1V}, only the effects of the motor running below the optimum voltage were flagged up by the detection methods. 
+
+It is also important to note that all anomaly detection methods correctly identified the anomalies but Standard Deviation from Moving Average, which failed to detect any of the anomalies caused by the under-voltage of the motor. This could be due to the used value of $X\sigma$ within the detection code being too high for the data set, thereby filtering out potential results.
+
+Each index within the data on which anomalous results are flagged up seem to be similar across each method, indicating no speed advantage between them, however, Median Absolute Deviation seems to stop flagging the anomaly before K Means Cluster and Five Sigma. %why?
+
+\begin{figure}[t]
+    \includegraphics[width=1.0\textwidth]{fig/large_30V_large_12V.pdf}
+    \caption[Overvoltage of Large Motor]{Waveform in the x axis for the large motor running at 30V, significantly above optimum voltage. K-means was trained against 12 V baseline data, assumed to be the motor's optimum working condition.}
+    \label{fig:largemotor_30V}
+\end{figure}
+
+%NEED TO TALK ABOUT OVERVOLTAGE HERE
+%Apparently motor voltage fluctuated as motor got hot. This very nicely shows how amplitude gradually increases towards end, and is found by the majority of time domain anomaly detection methods. 
+Figure.~\ref{fig:largemotor_30V} displays the effects of running the motor far above the optimum voltage of 12V. The voltage fluctuated toward the end of the testing data due to overheating of the motor, but was originally set at 30V. It clearly shows anomalous data corresponding with the heating of the motor as a direct result of over-voltage. Most time domain anomaly detection methods flagged these results with K Means Cluster detecting both before and after the Five Sigma test. This shows a clear advantage of using the K Means Cluster method as if the motor was switched off immediately as the first few anomalies were detected by the K Means Cluster test, the motor would not continue to operate at such high temperatures and fluctuating voltages which would potentially damage the motor.
+
+\subsection{Load}
+
+\subsubsection{Description of Failure Mode}
 The presence of a load puts a large amount of stress on the motor. As the motor struggles to reach the desired voltage, a greater current is drawn, which leads to overheating.
         
 There are many ways of adding a load to a motor, but attaching a fan immersed in water was chosen due to the ability to vary the load through using fans of different widths (1 cm, 2 cm and 3 cm).
@@ -192,12 +229,31 @@ This increases the torque of the shaft and resulted in the motor being able to d
 
 A test was then conducted for motor A. This time the motor could only reach a maximum of 4 V when the 1 cm fan was in use. This is evidence that as a load is added, a greater current is required to achieve a power that is large enough. A 10 A power supply was used for this experiment and this was the limiting factor, preventing the voltage from increasing further.
 
+\subsubsection{Application of Anomaly Detection}
+
+\begin{figure}[t]
+    \includegraphics[width=1.0\textwidth]{fig/large_4V-9A_water_large_12V.pdf}
+    \caption[Anomaly Plot Large Motor under Load]{Waveform for the large motor running under applied load from water bucket at 4 V. Anomaly detection trained against 12 V baseline data, assumed to be the motor's optimum working conditions.}
+    \label{fig:largemotor_water4V}
+\end{figure}
+
+Figure.~\ref{fig:largemotor_water4V} shows the anomaly tests being applied to data recorded when the large motor was running under an applied load.
+
+The standard deviation from moving average test looks at more short term changes along the time series. The algorithm involved calculates the mean and standard deviation of a `chunk' of data, and evaluates novelties in the data on a more local level. Larger spikes at the 30 second mark in Figure.~\ref{fig:largemotor_water4V} has meant that the fluctuations the test identified as anomalies are not visible.
+
+The spikes of data displayed in Figure.~\ref{fig:largemotor_water4V} seem to be due to the sub-optimum voltage that the motor is running at as a result of the water resistance applied to the fans. All other anomaly detection methods barring standard deviation from moving average provided meaningful pointers as to where the anomalous data is recorded, this is due to them very clearly only flagging the visible spikes.
+
+
+
+%std_dev_mov_av goes crazy. this looks for local changes rather wheras other threshold test slook at the data as a whole, this is why other stat tests only look at the spikes and this methods finds stuff for low amplitude data.
+%spikes are detected all by the anomaly tests. which one does it better? Link in physically to what the spikes actually mean...
+
 \subsection{Rotor Imbalance}
-As the rotor spins within the motor, it is important for the weight to be evenly distributed around the central axle. Any imbalance present can cause the rotor to shift in position toward the areas of concentrated mass. As a motor runs increased levels of vibrations are produced with the frequency of the vibrations matching the shaft rotation speed. This unnecessarily increases the stress on the bearings and, in extreme cases, this can cause contact between the rotor and the stator. This increased strain on the bearings causes a larger friction, not only reducing the efficiency of the motor but also damaging the bearings. This can lead to complicated maintenance operations that would be otherwise unnecessary for a properly aligned motor.
+As the rotor spins within the motor, it is important for the weight to be evenly distributed around the central axle. Any imbalance present can cause the rotor to shift in position toward the areas of concentrated mass \cite{xu1994vibration}. As a motor runs, increased levels of vibrations are produced with the frequency of the vibrations matching the shaft rotation speed. This unnecessarily increases the stress on the bearings and, in extreme cases, this can cause contact between the rotor and the stator. This increased strain on the bearings causes a larger friction, not only reducing the efficiency of the motor but also damaging the bearings. This can lead to complicated maintenance operations that would be otherwise unnecessary for a properly aligned motor.
 
-If there is contact between the rotor and stator, there is again an increase in friction. This is often a larger frictional force, decreasing the efficiency further, but also generating large amounts of heat. When operated in this condition for long periods of time, this can cause overheating discussed above. As the rotor spins against the stator, the friction is capable of causing unwanted damage to both the rotor and the stator. In the case that this force is large enough, the permanent magnets could become detached from the stator, ultimately resulting in a failed motor.
+If there is contact between the rotor and stator, there is again an increase in friction. This is often a larger frictional force, decreasing the efficiency further, but also generating large amounts of heat. When operated in this condition for long periods of time, this can cause overheating, as discussed above. As the rotor spins against the stator, the friction is capable of causing unwanted damage to both the rotor and the stator. In the case that this force is large enough, the permanent magnets could become detached from the stator, ultimately resulting in a failed motor.
 
-Some possible causes of an imbalanced motor include uneven wear through use, design or assembly errors, and an eccentricity of the rotor or any physical damage distorting components. Observing additional, unexpected frequencies could be due to an imbalance within the motor, and as such are a warning sign to the decline in health of the motor. 
+Some possible causes of an imbalanced motor include: uneven wear through use, design or assembly errors, and an eccentricity of the rotor or any physical damage distorting components. Observing additional, unexpected frequencies could be due to an imbalance within the motor, and as such are a warning sign to the decline in health of the motor. 
 
 %\begin{figure}
 %    \centering
@@ -215,21 +271,27 @@ As with all motors, it is impossible to attain a state of perfect balance, so sm
     \begin{subfigure}[t]{0.5\textwidth}
         \centering
         \includegraphics[height=2.5in]{small_baseline.pdf}
-        \caption{Shaft aligned}
     \end{subfigure}%
     ~ 
     \begin{subfigure}[t]{0.5\textwidth}
         \centering
         \includegraphics[height=2.5in]{small_misaligned_3.pdf}
-        \caption{Shaft misaligned}
     \end{subfigure}
-    \caption[Fourier Plot Misaligned Shaft]{Fourier }
+    \caption[Fourier Plot Misaligned Shaft]{Fourier spectra for the small motor in all three axes. Left: baseline test at 15 V. Right: motor run at 15 V with bent shaft.}
+    \label{fig:bent_shaft_fourier}
 \end{figure*}
 
+%Talk about very distinct harmonics appearing with bent shaft. Physically why would this be?
+Figure.~\ref{fig:bent_shaft_fourier} displays the effects on amplitude following the bending of the motor shaft. As clearly visible in the figure, the $z$ axis displays very distinct harmonics after the shaft is bent. This is most likely caused by knocking and unwanted contact within the motor, reducing the effectiveness of the motor's operation.
+
+%Time domain tests find continuous anomalies with the K-means and the five sigma test, but these tests also find anomalies in the baseline test, indication possible false positives. For rotor imbalance, frequency analysis definitely seems more effective. 
+
 \subsection{Brush Damage}
+
+\subsubsection{Description of Failure Mode}
 The brushes of a DC motor are a vital component, key to the proper working of the motor, allowing a DC power supply to provide an almost constant driving force throughout the entire revolution of the motor. The stationary brushes, combined with the rotating commutator attached to the rotor, periodically inverts the power supply throughout the revolutions. The commutator is composed of strips of conducting metal, usually copper, placed around the rotor. The strips of copper supply the current from the spring loaded brushes to the windings.  Without this periodic inversion of current direction through the windings, the motor would fail to spin and, as such, a good contact between the face of the brush and the commutator is necessary. 
 
-The main cause of damage to the brushes of a DC motor usually occurs during maintenance. The soft surfaces of the carbon brushes can be easily scratched if not handled correctly. It is also possible that dirt can enter the motor housing during operation, which if found between the brush and the commutator, can cause heavy damage. In order to induce this type of failure mode, the brushes of motor A were treated with a heavy grit sandpaper, leaving the surface very rough, see Figure.~\ref{fig:brush_damage}
+The main cause of damage to the brushes of a DC motor usually occurs during maintenance. The soft surfaces of the carbon brushes can be easily scratched if not handled correctly \cite{hamilton2000dc}. It is also possible that dirt can enter the motor housing during operation, which if found between the brush and the commutator, can cause heavy damage. In order to induce this type of failure mode, the brushes of motor A were treated with a heavy grit sandpaper, leaving the surface very rough, see Figure.~\ref{fig:brush_damage}.
 
 \begin{figure}[t]
     \includegraphics[width=1.0\textwidth]{fig/brush_comparison.jpg}
@@ -237,16 +299,32 @@ The main cause of damage to the brushes of a DC motor usually occurs during main
     \label{fig:brush_damage}
 \end{figure}
 
-It is possible for any imperfections in the surface of the carbon brushes to be removed without intervention during normal operation. As the rotor spins making contact with the face of the brushes, the friction generated is often capable of reducing the magnitude of the scratches. To investigate this, after the brushes had been damaged, the motor was operated for 30 minutes at 12 V to allow for the possibility of self repair. FROM ANALYSIS DID THIS WORK?
+It is possible for any imperfections in the surface of the carbon brushes to be removed without intervention during normal operation. As the rotor spins, making contact with the face of the brushes, the friction generated is often capable of reducing the magnitude of the scratches. To investigate this, after the brushes had been damaged, the motor was operated for 30 minutes at 12 V to allow for the possibility of self repair. %FROM ANALYSIS DID THIS WORK? ---- It did indeed --wow thats awesome
 
 The friction within the brushes can cause another failure mode, loss of contact due to reduction in size of the brushes over time. This requires the brushes to be entirely replaced, making brushed motors unsuitable for use in remote locations.
 
 The rough contact between the brush and commutator when damaged can cause sparking, leading to damaged commutators. Replacing the brush on a motor is a relatively simple maintenance task, however replacing the copper strips of a commutator can be more complicated. It is therefore important to ensure that a motor running with damaged brushes is identified immediately, to prevent running in sub-optimal conditions, potentially causing further damage
 
-Due to the flaws in the brushed DC motor model, their use has been declining with the introduction of brushless DC motors. These use an integrated switching power supply, to convert the DC to AC for the motor to run. Another alternative is to simply use an AC motor. 
+Due to the flaws in the brushed DC motor model, their use has been declining with the introduction of brushless DC motors. These use an integrated switching power supply, to convert the DC to AC for the motor to run \cite{hanselman2003brushless}. Another alternative is to simply use an AC motor. 
 %hammer brush explanaion with picture if data shows it had any meaningfull effect?
 
+\subsubsection{Application of Anomaly Detection}
+
+\begin{figure}[t]
+    \includegraphics[width=1.0\textwidth]{fig/large_manual_repair_large_12V.pdf}
+    \caption[Anomaly Test Brush Damage]{The waveform in the x axis for the large motor after brush damage, showing the process of self-repair.}
+    \label{fig:largemotor_brushdamage}
+\end{figure}
+
+Figure.~\ref{fig:largemotor_brushdamage} highlighted the motor vibrations becoming less and less of an anomalous nature during the process of self repair. This is observed by the frequency of K-means anomaly alerts steadily decreasing as the motor returns to state that is more in agreement with the baseline data it has been trained against. This is evidence that the K-means test can successfully distinguish anomalous and normal regimes over the course of a continuous measurement with high reliability.
+
+The large amplitude spikes in Figure.~\ref{fig:largemotor_brushdamage} is indicative of catastrophic anomalies that significantly changes the performance of the motor. These anomalies may be due to the rotor slipped due the applied load, or due to water turbulence. Regardless, all applied anomaly detection methods detected these with ease.
+
+%K means find the anomalies while it's returning to it's normal state. std_dev false positives? generally pretty interesting. lots to talk about physically here TURBULENCE? poss reason for stdev
+
 \subsection{Gear Damage}
+
+\subsubsection{Description of Failure Mode}
 
 \begin{figure*}[t!]
     \centering
@@ -262,29 +340,137 @@ Due to the flaws in the brushed DC motor model, their use has been declining wit
     \caption[Damaged Gears]{The gears of motor B after they were degreased, placed in water and had mud added. Some rust can be seen on the top of each cog.}
     \end{subfigure}
     \caption[Motor Gears]{}
+    \label{fig:gear_damage}
 \end{figure*}
 
 Gears are used to increase the torque of a motor so that it can take more load. The specific case relating rotation speeds for this motor is shown in Equation.~\eqref{eq:gear_ratio}.
 
-The gears of a motor were damaged in ways so as to increase the friction inside the motor. This should raise the temperature of the motor, leading to overheating. One minute readings were taken before and after each seperate attempt to deteriorate the motor. 
+The gears of a motor were damaged in ways so as to increase the friction inside the motor. This should raise the temperature of the motor, leading to overheating. One minute readings were taken before and after each separate attempt to deteriorate the motor. 
 
 The first method used was to degrease the gears using citrus degreasing spray. This was done several times to ensure gears were thoroughly cleaned.
 
 They were then placed in water for 3 days so that they would rust.
 
-Finally dirt was then added. This was an attempt to not only prevent easy movement, but also break some of the teeth.
+Finally dirt was then added. This was an attempt to not only prevent easy movement, but also break some of the teeth. This can be seen in Figure.~\ref{fig:gear_damage}.
 
 After each of these tests, it was audible that the gears were deteriorating. 
 
 
-\subsection{Soft footing}
+\subsubsection{Application of Anomaly Detection}
 
-A motor running with soft footing can be the cause of multiple failures within a motor. When a motor with a misaligned shaft is coupled with an uneven motor housing, the uneven weight distribution as the rotor spins is exaggerated. The negative impacts of the uneven shaft are amplified, meaning even misalignments can now be damaging. 
+\begin{figure}[t]
+    \includegraphics[width=1.0\textwidth]{fig/WD40_dry_dirt_12V_motornorm12V.pdf}
+    \caption[Anomaly Tests 12 V Motor with Dirt]{The waveform for the 12 V motor in the x axis with gears de-greased and dirt added. Anomaly detection for K-means trained against baseline data at 12 V, which was assumed to be the motor's optimum working conditions.}
+    \label{fig:12V_dirt}
+\end{figure}
+
+Following the de-greasing of the motor the data displayed no anomalies across the detection methods. Once the dirt was added inside the motor however anomalies began occurring, most likely due to the friction between the dirt and the moving parts of the motor which is as expected.
+
+%No anomalies fired after the initial de-greasing (don't need to show figure for this, just mention it).
+%After dirt was added, anomalies started showing up.
+
+
+
+
+\begin{figure}[t]
+    \includegraphics[width=1.0\textwidth]{fig/WD40_dry_dirt_12V_motornorm12V.pdf}
+    \caption[Anomaly Tests 30 V Motor with Paper Jam]{The waveform for the 12 V motor in the x axis run at 30 V, with gears de-greased and paper jammed in rotor. Anomaly detection for K-means trained against baseline data at 12 V, which was assumed to be the motor's optimum working condition.}
+    \label{fig:12V_paper}
+\end{figure}
+
+\begin{figure}[t]
+    \includegraphics[width=1.0\textwidth]{fig/WD40_after_paper_12V_motornorm12V.pdf}
+    \caption[Anomaly Tests 12 V Motor after Paper Jam]{The waveform for the 12 V motor in the x axis run at 12 V, with gears degreased, after paper had been jammed in the rotor. Anomaly detection for K-means trained against baseline data at 12 V, which was assumed to be the motor's optimum working condition.}
+    \label{fig:12V_afterpaper}
+\end{figure}
+
+%Not sure we should include the paper jamming here, could maybe go in specific anomalies?
+
+\subsection{Soft Footing}
+
+\subsubsection{Description of Failure Mode}
+A motor running with soft footing can be the cause of multiple failures within a motor \cite{finley1999analytical}. When a motor with a misaligned shaft is coupled with an uneven motor housing, the uneven weight distribution as the rotor spins is exaggerated. The negative impacts of the uneven shaft are amplified, meaning even misalignments can now be damaging. 
 
 The cause of a soft footing can be either an imperfection in the mounting feet of the motor, or the foundations the motor is mounted upon. In either case the motor will have the ability to move in a diagonal plane, similar to a chair or table on uneven ground, causing the shaft to become misaligned. This can be avoided by properly aligning the mountings and the foundations, commonly performed in industry using laser precision tools. 
 
-This failure mode was induced by suspending the large motor above the work surface with a loosely gripped clamp stand. Any movement within the motor could cause a much larger movement in the stand, allowing the motor to oscillate while being suspended in the air. This oscillation will have an impact upon the shaft within the motor, exaggerating movements within the stator. The effects of this are similar to misalignment discussed above. Depending on the frequency of rotation of the motor, a resonance can occur, massively amplifying the oscillations causing an increased level of damage. If the feet do become loose, it is important to be aware of this before long term running of the motor is performed, as this would cause damage to internal components. It is more cost and energy effective to ensure proper footings prior to running.
+This failure mode was induced by suspending motor A above the work surface with a loosely gripped clamp stand. Any movement within the motor could cause a much larger movement in the stand, allowing the motor to oscillate while being suspended in the air. This oscillation will have an impact upon the shaft within the motor, exaggerating movements within the stator. The effects of this are similar to misalignment discussed above. Depending on the frequency of rotation of the motor, a resonance can occur, massively amplifying the oscillations causing an increased level of damage. If the feet do become loose, it is important to be aware of this before long term running of the motor is performed, as this would cause damage to internal components. It is more cost and energy effective to ensure proper footings prior to running.
+
+\subsubsection{Application of Anomaly Detection}
+
+\begin{figure}[t]
+    \includegraphics[width=1.0\textwidth]{fig/large_unlevel_large_12V.pdf}
+    \caption[Anomaly Tests Large Motor Uneven Footing]{The waveform for the large motor in the x axis with soft footing. Anomaly detection for K-means trained against 12 V baseline data, which was assumed to be the motor's optimum working conditions.}
+    \label{fig:large_uneven_footing}
+\end{figure}
+
+
+%Talk about how only K-means fires, and finds a change int he SHAPE of the waveform, rather than just a change in amplitude. This is one big advantage of the reconstruction techniques compared to the simple statistical tests. Physically why would soft footing manifest itself like this?
+
+\begin{figure*}[t!]
+    \centering
+    \begin{subfigure}[t]{0.5\textwidth}
+        \centering
+        \includegraphics[height=2.5in]{freq_large_12V.pdf}
+    \end{subfigure}%
+    ~ 
+    \begin{subfigure}[t]{0.5\textwidth}
+        \centering
+        \includegraphics[height=2.5in]{freq_large_unlevel.pdf}
+    \end{subfigure}
+    \caption[Fourier Plot Soft Footing]{Fourier spectrum for the large motor. Left: baseline data in which motor was run at 12 V, which is assumed to be optimum running conditions. Right: large motor with soft footing, simulated by suspending the motor within a loosely gripped clamp stand. }
+\end{figure*}
+
+%very obvious harmonics appearing, probably induced by motor being able to move more freely - might be harmonics associated with the fundamental frequency of the clamp stand. Peak between 600 and 800 Hz in x and y axis but not in z - why? Overall power over all frequencies much higher in general.
 
 \subsection{Specific Failures}
 
-For testing purposed, to ensure that the various anomaly detection algorithms performed as expected, specific anomalies were induced. These included applying a force on the shaft, a routine of taps on the sensors or increasing and decreasing the voltage. The variations in frequencies induced by these actions are not found in a normal working motor, so the algorithm should detect these changes as anomalous. 
+\subsubsection{Description}
+
+For testing purposes, to ensure that the various anomaly detection algorithms performed as expected, specific anomalies were induced. These included applying a force on the shaft, a routine of taps on the sensors or increasing and decreasing the voltage. The variations in frequencies induced by these actions are not found in a normal working motor, so the algorithm should detect these changes as anomalous. 
+
+\subsubsection{Application of Anomaly Detection}
+
+\begin{figure}[t]
+    \includegraphics[width=1.0\textwidth]{fig/specific_anomaly_test1_motornorm12V.pdf}
+    \caption[Specific Anomaly Test]{The waveform and detected anomalies in the x axis for the 12 V motor, with motors purposefully tapped at 30 seconds and voltage increased towards the end, in order to test the reliability of the anomaly detection methods being implemented.}
+    \label{fig:spec_anom1}
+\end{figure}
+
+%Talk about reliability of methods in finding anomalies. K-means doesn't find the increasing voltage at the end - perhaps showing important of fourier spectra for certain cases. 
+
+\subsection{Commutator Damage}
+
+\subsubsection{Description of Failure Mode}
+
+As discussed earlier, a clean connection between the commutator and brushes is necessary for the healthy and efficient running of a DC motor. A disruption to this connection can be caused by either damage to the brushes, or the commutator. 
+
+%\begin{figure*}[t!]
+%    \centering
+%    \begin{subfigure}[t]{0.5\textwidth}
+%        \centering
+%        \includegraphics[trim = {0 9cm 0 6cm}, clip, width=\textwidth]{Commutator_Before.JPG}
+%        \caption[Healthy Commutator]{The healthy commutator of motor B.}
+%    \end{subfigure}%
+%    ~ 
+%    \begin{subfigure}[t]{0.5\textwidth}
+%        \centering
+%         \includegraphics[trim = {0 9cm 0 6cm}, clip, width=\textwidth]{Commutator_After.JPG}
+%    \caption[Damaged Commutator]{The commutator of motor B after impact force.}
+%    \end{subfigure}
+%    \caption[Motor Commutator]{}
+%    \label{fig:commutator_damage}
+%\end{figure*}
+
+To simulate the effect of long term commutator damage, the commutators on motor B were impacted with a force. This deformed the commutator away from their ordinary shape, an extreme example of the types of damage that can manifest in a failing motor. The cause of this type of damage would usually be from some misalignment within the motor, requiring a mechanical movement. However sparking brushes from damaged carbon rods could also cause similar levels of harm to the connection. Replacing the commutator is a larger maintenance task, and this highlights the dangers of allowing a motor to run till it reaches this condition. If the other motor components are well maintained, this type of damage should not occur, it is therefore of utmost importance to ensure all motor components are operating at full health at all times.  
+
+\subsubsection{Application of Anomaly Detection}
+
+
+\begin{figure}[t]
+    \includegraphics[width=1.0\textwidth]{fig/12V_hammer_motornorm12V.pdf}
+    \caption[Anomaly Tests 12 V Commutator Damage]{The waveform for the 12 V motor after Commutator Damage}
+    \label{fig:12V_Hammer}
+\end{figure}
+
+%K-means catching everything. Not false positives as when applied to baseline data, no anomaly indices are returned. Link result with what would be expected to happen physically. 
+
