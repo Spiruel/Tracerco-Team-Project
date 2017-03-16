@@ -58,7 +58,7 @@ Mechanical components, such as the bearings, shaft or motor housing are prone to
     (8,1) to[short] node[ground] {} (8,-3)
     ;
     \end{circuitikz}
-    \caption[Sensor circuit board]{The circuit required to record data. Vibrations recorded by the contact microphones from an analogue output, convert to digital using a National instruments DAQ box.}
+    \caption[Sensor Circuit Board]{The circuit required to record data. Vibrations recorded by the contact microphones from an analogue output, convert to digital using a National instruments DAQ box.}
     \label{fig:circuit_diagram}
 \end{figure}
 
@@ -96,7 +96,9 @@ In order to determine which frequency components were from the motors and what w
 
 Figure.~\ref{fig:freq_large0V} shows the frequency spectra for a calibration test with the large motor. 
 
-----write more
+This peak was originally attributed to ambient sounds in the lab, however repeat measurements were conducted with the microphones not powered and the peaks still persisted. This indicates that the source of the noise is from the DAQ box or electronics. 
+
+The position of this peak appeared to vary randomly between approximately 300 and 700 Hz, for different data sets. The reason for this is unknown, however for most cases the peak was at a higher frequency compared to the fundamental frequencies of the motors, and was often orders of magnitude smaller. 
 
 \subsection{Baseline Tests}
 
@@ -106,7 +108,9 @@ Figure.~\ref{fig:freq_large0V} shows the frequency spectra for a calibration tes
     \label{fig:kmeans_large4V}
 \end{figure}
 
-Figure.~\ref{fig:kmeans_large4V} shows the K-means reconstruction of a three second signal using training and testing data both from a baseline test run. The first three seconds of the baseline test run was used as training data and the second three seconds used as fitting data. This was done to check if the synthetic segments could be used to recreate a later section of the same baseline run with minimal reconstruction error. 
+Figure.~\ref{fig:kmeans_large4V} shows the K-means reconstruction of a three second signal using training and testing data both sourced from a `baseline test run'. A baseline test run is data collected from a motor running under its optimum working conditions, with a supply voltage of 12 V for all motors apart from Motor C (see Table.\ref{motor_table}). The motor would be free from an applied load, any damage, or anything else that could cause the manifestation of an investigated failure mode. A baseline test run provided us with the `normal' data that one could training various models with, on the assumption that the nature of the vibration data is wholly representative of the motor's intended behaviour.
+
+The first three seconds of the baseline test run was used as training data and the second three seconds used as fitting data. This was done to check if the synthetic segments could be used to recreate a later section of the same baseline run with minimal reconstruction error. 
 
 \subsection{Overheating}
 
@@ -127,11 +131,11 @@ The result of just one coil being broken is that there would be a brief loss of 
 In addition to this, the motor was placed in an oven at 200 $^o$C for 2 hours to cause extensive damage to all the coils evenly. This equates to over 30,000 hours of running in regular conditions. This was considered sufficient to bring the motor very close to failure given the typical life span of a 12 V motor is just 1000 hours. %1000???
 Data was then collected for one minute to find any lasting damage.
 
-In case this did not result in the targeted coil breaking entirely, a further experiment was devised that simulated this effect. To inhibit just one coil, one of the coils was cut. It was then observed that the rotation speed was not constant with no power being given to the motor for $({2}/{7})$ of the time - due to the fact that neither of the two brushes could be in contact with the broken coil. Further coils were cut and the speed was noted to become even more erratic until. Once four had been broken, the motor was unable to run at all as there was never a point where two brushes were in contact with working coils.
+In case this did not result in the targeted coil breaking entirely, a further experiment was devised that simulated this effect. To inhibit just one coil, one of the coils was cut. It was then observed that the rotation speed was not constant with no power being given to the motor for $({2}/{7})$ th of the time - due to the fact that neither of the two brushes could be in contact with the broken coil. Further coils were cut and the speed was noted to become even more erratic. Once four had been broken, the motor was unable to run at all as there was never a point where two brushes were in contact with working coils.
 
 \begin{figure}[t]
     \includegraphics[width=1.0\textwidth]{fig/Gears_Removed_Inside.JPG}
-    \caption[Motor Placed on Hotplate]{The inside of the Gears removed motor showing the 7 separate coils, one of which was placed directly on the hotplate at 150 $^o$C for one hour to induce failure.}
+    \caption[Inside Workings of Motor D]{The inside of the Gears removed motor showing the 7 separate coils, one of which was placed directly on the hotplate at 150 $^o$C for one hour to induce failure.}
     \label{fig:hotplate_motor}
 \end{figure}
 
@@ -139,12 +143,28 @@ In case this did not result in the targeted coil breaking entirely, a further ex
 
 \subsubsection{Application of Anomaly Detection}
 
-%time domain tests don't show any anomaly detections for hot plate - talk about fourier.
 
+\begin{figure*}[t!]
+    \centering
+    \begin{subfigure}[t]{0.5\textwidth}
+        \centering
+        \includegraphics[height=2.5in]{freq_gears_removed_baseline.pdf}
+    \end{subfigure}%
+    ~ 
+    \begin{subfigure}[t]{0.5\textwidth}
+        \centering
+        \includegraphics[trim = {2.61cm 0 0 0}, clip,height=2.5in]{freq_gears_removed_oven.pdf}
+    \end{subfigure}
+    \caption[Fourier Plot Overheating]{Fourier spectra for the gears removed motor in all three axes. Left: baseline test at 12 V. Right: motor run at 12 V after being placed in oven at 200$^{\circ}$C for 2 hours.}
+    \label{fig:overheating_fourier}
+\end{figure*}
+
+%time domain tests don't show any anomaly detections for hot plate - talk about fourier.
 
 %time domain detect anomalies for oven but very few
 
-%I will make fourier plots and talk about these for this section as there seems to be a bigger change in the fourier spectra. 
+
+%after one winding is snipped completely, fourier spectrum is similar to baseline, but with peak frequency lower - peaking at about 10 Hz. Gaussian couldn't be fit as the peak was so close to 0 Hz, it didn't recognise it as a peak.
 
 
 \subsection{Overvoltage and Undervoltage}
@@ -169,7 +189,7 @@ The effect of overvoltaging  was investigated by running motor B at increasingly
     
 %Large Motor
 
-A second motor, motor A, was run at 30 V for one hour. In this instance, the bearings reached 90 $^o$C; this demonstrates the extreme effects of overvoltaging a motor. Readings could not be taken during this run as the sensors are only able to operate %Need synonym
+A second motor, motor A, was run at 30 V for one hour. In this instance, the temperature of the bearings reached 90 $^o$C; this demonstrates the extreme effects of overvoltaging a motor. Readings could not be taken during this run as the sensors are only able to operate %Need synonym
 up to 60 $^o$C. %Correct???
 Therefore, readings were taken before and after the one hour run. This allowed us to explore the long term effects of overvoltaging a motor.
 
@@ -190,20 +210,20 @@ In order to investigate the effects of undervoltaging a motor, data was collecte
 
 \begin{figure}[t]
     \includegraphics[width=1.0\textwidth]{fig/large_1V_nowater_large_12V.pdf}
-    \caption[Undervoltage of Large Motor2]{Waveform for the large motor running at 1V, significantly below optimum voltage. Anomaly detection trained against 12 V baseline data, assumed to be the motor's optimum working conditions.}
+    \caption[Undervoltage of Large Motor]{Waveform for the large motor running at 1V, significantly below optimum voltage. Anomaly detection trained against 12 V baseline data, assumed to be the motor's optimum working conditions.}
     \label{fig:largemotor_1V}
 \end{figure}
 
 %refer in the text that when this test is tested against baseline data, it doesn't return any anomalies therefore this undervoltage is the thing causing the anomalies. all anomaly method detected the anomalies. EXCEPT from stdev_from_mov_av. WHY? which anomaly detection caught is sooner? zoom in it could potentially be something to ask jake and rob more, what could be the physical reason of these spikes when it's being unvoltaged.
 When the anomaly detection methods were tested against the baseline data for the 12 V motor, no method detected any anomalous data points within the set. Therefore one can assume that on the test data presented in Figure.~\ref{fig:largemotor_1V}, only the effects of the motor running below the optimum voltage were flagged up by the detection methods. 
 
-It is also important to note that all anomaly detection methods correctly identified the anomalies but Standard Deviation from Moving Average, which failed to detect any of the anomalies caused by the under-voltage of the motor. This could be due to the used value of $X\sigma$ within the detection code being too high for the data set, thereby filtering out potential results.
+It is also important to note that all anomaly detection methods correctly identified the anomalies but Standard Deviation from Moving Average, which failed to detect any of the anomalies caused by the under-voltage of the motor. This could be due to the used value of $4\sigma$ within the detection code being too high for the data set, thereby filtering out potential results.
 
 Each index within the data on which anomalous results are flagged up seem to be similar across each method, indicating no speed advantage between them, however, Median Absolute Deviation seems to stop flagging the anomaly before K Means Cluster and Five Sigma. %why?
 
 \begin{figure}[t]
     \includegraphics[width=1.0\textwidth]{fig/large_30V_large_12V.pdf}
-    \caption[Overvoltage of Large Motor]{Waveform in the x axis for the large motor running at 30V, significantly above optimum voltage. K-means was trained against 12 V baseline data, assumed to be the motor's optimum working condition.}
+    \caption[Overvoltage of Large Motor]{Waveform in the x axis for the large motor running at 30 V, significantly above optimum voltage. K-means was trained against 12 V baseline data, assumed to be the motor's optimum working condition.}
     \label{fig:largemotor_30V}
 \end{figure}
 
@@ -306,7 +326,7 @@ The friction within the brushes can cause another failure mode, loss of contact 
 The rough contact between the brush and commutator when damaged can cause sparking, leading to damaged commutators. Replacing the brush on a motor is a relatively simple maintenance task, however replacing the copper strips of a commutator can be more complicated. It is therefore important to ensure that a motor running with damaged brushes is identified immediately, to prevent running in sub-optimal conditions, potentially causing further damage
 
 Due to the flaws in the brushed DC motor model, their use has been declining with the introduction of brushless DC motors. These use an integrated switching power supply, to convert the DC to AC for the motor to run \cite{hanselman2003brushless}. Another alternative is to simply use an AC motor. 
-%hammer brush explanaion with picture if data shows it had any meaningfull effect?
+%hammer brush explanaion with picture if data shows it had any meaningful effect?
 
 \subsubsection{Application of Anomaly Detection}
 
@@ -316,9 +336,9 @@ Due to the flaws in the brushed DC motor model, their use has been declining wit
     \label{fig:largemotor_brushdamage}
 \end{figure}
 
-Figure.~\ref{fig:largemotor_brushdamage} highlighted the motor vibrations becoming less and less of an anomalous nature during the process of self repair. This is observed by the frequency of K-means anomaly alerts steadily decreasing as the motor returns to state that is more in agreement with the baseline data it has been trained against. This is evidence that the K-means test can successfully distinguish anomalous and normal regimes over the course of a continuous measurement with high reliability.
+Figure.~\ref{fig:largemotor_brushdamage} highlighted the motor vibrations becoming less and less of an anomalous nature during the process of self repair. This is observed by the frequency of K-means anomaly alerts steadily decreasing as the motor returns to a state that is more in agreement with the baseline data it has been trained against. This is evidence that the K-means test can successfully distinguish anomalous and normal regimes over the course of a continuous measurement with high reliability.
 
-The large amplitude spikes in Figure.~\ref{fig:largemotor_brushdamage} is indicative of catastrophic anomalies that significantly changes the performance of the motor. These anomalies may be due to the rotor slipped due the applied load, or due to water turbulence. Regardless, all applied anomaly detection methods detected these with ease.
+The large amplitude spikes in Figure.~\ref{fig:largemotor_brushdamage} is indicative of catastrophic anomalies that significantly change the performance of the motor. These anomalies may be due to the rotor slipping due to the applied load, or due to water turbulence. Regardless, all applied anomaly detection methods detected these with ease.
 
 %K means find the anomalies while it's returning to it's normal state. std_dev false positives? generally pretty interesting. lots to talk about physically here TURBULENCE? poss reason for stdev
 
@@ -347,7 +367,7 @@ Gears are used to increase the torque of a motor so that it can take more load. 
 
 The gears of a motor were damaged in ways so as to increase the friction inside the motor. This should raise the temperature of the motor, leading to overheating. One minute readings were taken before and after each separate attempt to deteriorate the motor. 
 
-The first method used was to degrease the gears using citrus degreasing spray. This was done several times to ensure gears were thoroughly cleaned.
+The first method used was to remove grease from the gears using WD40. This was done several times to ensure gears were thoroughly cleaned.
 
 They were then placed in water for 3 days so that they would rust.
 
@@ -366,15 +386,13 @@ After each of these tests, it was audible that the gears were deteriorating.
 
 Following the de-greasing of the motor the data displayed no anomalies across the detection methods. Once the dirt was added inside the motor however anomalies began occurring, most likely due to the friction between the dirt and the moving parts of the motor which is as expected.
 
-%No anomalies fired after the initial de-greasing (don't need to show figure for this, just mention it).
-%After dirt was added, anomalies started showing up.
+Figure.~\ref{fig:12V_dirt} shows that both the K-means and five sigma tests identified anomalies at similar times. The anomalies are visible in the waveform, and are probably caused by increased motor load as gear teeth have encountered a grain of dirt. 
 
-
-
+At around the 5 second mark in Figure.~\ref{fig:12V_dirt}, it can be seen that the K-means test has successfully detected true anomalies for a longer time period that the five sigma test. This suggests that the K-means is more sensitive to true anomalies caused by interruptions in the gears of a motor.
 
 \begin{figure}[t]
     \includegraphics[width=1.0\textwidth]{fig/WD40_dry_dirt_12V_motornorm12V.pdf}
-    \caption[Anomaly Tests 30 V Motor with Paper Jam]{The waveform for the 12 V motor in the x axis run at 30 V, with gears de-greased and paper jammed in rotor. Anomaly detection for K-means trained against baseline data at 12 V, which was assumed to be the motor's optimum working condition.}
+    \caption[Anomaly Tests 30 V Motor with Paper Jam]{The waveform for the 12 V motor in the x axis run at 30 V, with gears de-greased and paper jammed in the rotor. Anomaly detection for K-means trained against baseline data at 12 V, which was assumed to be the motor's optimum working condition.}
     \label{fig:12V_paper}
 \end{figure}
 
@@ -418,7 +436,10 @@ This failure mode was induced by suspending motor A above the work surface with 
         \includegraphics[height=2.5in]{freq_large_unlevel.pdf}
     \end{subfigure}
     \caption[Fourier Plot Soft Footing]{Fourier spectrum for the large motor. Left: baseline data in which motor was run at 12 V, which is assumed to be optimum running conditions. Right: large motor with soft footing, simulated by suspending the motor within a loosely gripped clamp stand. }
+    \label{soft_footing}
 \end{figure*}
+
+Following a loosening of the clamp stands on which the motor was running, a significant increase in power over all frequencies was detected. Very obvious harmonics are visible in Figure.~\ref{soft_footing} which are possibly associated with the fundamental frequency of the clamp stand. The peaks displayed on the $x$ and $y$ axes between 600 and 800 Hz are very pronounced, however, the peak on the $z$ axis lacks the same definition. This could be attributed to the motor having its movement more constricted along the $z$ axis. The increase in overall power across the frequencies makes physical sense due to the motor coming into and out of contact with the clamp at many different locations and times during the cycle.
 
 %very obvious harmonics appearing, probably induced by motor being able to move more freely - might be harmonics associated with the fundamental frequency of the clamp stand. Peak between 600 and 800 Hz in x and y axis but not in z - why? Overall power over all frequencies much higher in general.
 
@@ -464,7 +485,6 @@ As discussed earlier, a clean connection between the commutator and brushes is n
 To simulate the effect of long term commutator damage, the commutators on motor B were impacted with a force. This deformed the commutator away from their ordinary shape, an extreme example of the types of damage that can manifest in a failing motor. The cause of this type of damage would usually be from some misalignment within the motor, requiring a mechanical movement. However sparking brushes from damaged carbon rods could also cause similar levels of harm to the connection. Replacing the commutator is a larger maintenance task, and this highlights the dangers of allowing a motor to run till it reaches this condition. If the other motor components are well maintained, this type of damage should not occur, it is therefore of utmost importance to ensure all motor components are operating at full health at all times.  
 
 \subsubsection{Application of Anomaly Detection}
-
 
 \begin{figure}[t]
     \includegraphics[width=1.0\textwidth]{fig/12V_hammer_motornorm12V.pdf}

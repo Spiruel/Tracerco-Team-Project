@@ -7,7 +7,7 @@ In addition to this, peak-fitting in Fourier space and a visual inspection of ha
 
 As part of the data reduction procedure, a moving average was applied to data in both the time domain and the frequency domain. A moving average essentially applies a low-pass filter to the data.
 
-For the time domain, this was mainly applied in order to ensure more accurate reconstructions when using techniques such as K-mean Clustering Reconstruction (see \S~\ref{subsec:kmeans}) and LSTM Recurrent Neural Networks (see \S~\ref{subsec:LSTM}).
+For the time domain, this was mainly applied in order to ensure more accurate reconstructions when using techniques such as K-mean Clustering Reconstruction (see \S\ref{subsec:kmeans}) and LSTM Recurrent Neural Networks (see \S\ref{subsec:LSTM}).
 
 The moving average was applied to the frequency domain, after the Fourier transform has already been applied to the unaltered time series data. This ensures that all of the higher frequencies were not lost.
 
@@ -34,10 +34,6 @@ where the array is of length $w$. This is then convolved with the data set, whic
 
 Figures.~\ref{fig:moving_av} and ~\ref{fig:freq_moving_av} show examples of applying a moving average to data in the time domain and frequency domain, respectively. 
 
-
-%----Moving average for dealing with issues with the resolution for the raw data in the y axis.
-%----Change figure in time domain to show resolution problem and how this was sorted using moving average
-
 \subsection{Statistical Approach}
 
 The most simple methods for detecting changes from `normal' motor behaviour can either use simple value thresholds, or static mean and standard deviation calculates to determine when data experiences a significant deviation from usual patterns. 
@@ -62,6 +58,8 @@ In order to ensure that the data to which the statistical tests were applied fol
 \end{figure}
 
 Figure.~\ref{fig:move_av_hist} shows how the distribution for the moving-averaged data has a Gaussian distribution, whereas the raw data does not.
+
+Additionally, when motors were running at low voltages, the signal amplitude was so low that the resolution of the contact microphones was of the same magnitude as the amplitude of vibrations. This can be seen in Figure.~\ref{fig:histogram}, with overbinning occurring on the raw data, leading to gaps in the distribution. As Figure~\ref{fig:histogram} shows, this was resolved when taking the moving average, making the amplitudes more continuous rather than discrete.
 
 It was therefore necessary to apply a moving average to the raw data before any statistical tests were performed.
 
@@ -201,7 +199,7 @@ Due to the lower dynamic range and greater variability of these secondary peaks,
 \subsection{Least Squares Anomaly Detection}
 Included amongst the anomaly detection methods is a squared-loss objective function which is quick to detect anomalous data given a set of training and testing data sets. Due to the rudimentary nature of the function and the very simple analytical solution, it has a speed advantage over other methods, as well as presenting an anomaly score across the train and test data to visualise the magnitude of the anomalous data points. It can also be used to evaluate the difference between sub-sequences and therefore isn't invalidated when the data set contains structural dependence.
 
-Initially a moving average was applied to the data to low pass it before median filtering. The class-conditional probability of the data point,  $p(y|\mathbf{x})$, was then determined for $p(y=i|\mathbf{x}, \mathbf{\theta_i})$ using equations $q(y=i|\mathbf{x}$, $\mathbf{\theta_i})$ for each $i \in \chi$, where $\chi = \{1, ...., c\}$ is the set of all possible classes.
+Initially a moving average was applied to the data to low pass it before median filtering. The following method \cite{lsanomalypaper} is then applied to the data. The class-conditional probability of the data point,  $p(y|\mathbf{x})$, was then determined for $p(y=i|\mathbf{x}, \mathbf{\theta_i})$ using equations $q(y=i|\mathbf{x}$, $\mathbf{\theta_i})$ for each $i \in \chi$, where $\chi = \{1, ...., c\}$ is the set of all possible classes.
 It is achieved by using the approximations,
 
 \begin{equation}
@@ -253,7 +251,7 @@ This method therefore identifies anomalous results by assigning probabilities of
 
 Cluster analysis involves combining data points into groups, or clusters, in such a way that the points in each cluster are more similar to each other than other points outside of the cluster. Any data points that do not belong to a cluster are defined as outliers. 
 
-Figure.~\ref{fig:anomalies} in \S \ref{subsec:anomaly_detection} shows an example of clusters in 2 dimensions. 
+Figure.~\ref{fig:anomalies} in \S\ref{subsec:anomaly_detection} shows an example of clusters in 2 dimensions. 
 
 K-means clustering is one of the most highly used cluster analysis methods, due to it being much less computationally intensive in comparison to other approaches \cite{Kanungo:2002:EKC:628329.628801}.
 
@@ -427,4 +425,6 @@ In order to combat this, regularisation methods such as dropout can be used. Mor
 \subsection{Rejected Methods of Anomaly Detection}
 The support vector machine anomaly detection method was a considered method which was ultimately rejected. It operates by selecting a hyperplane through the data and classifying all data to one side anomalous. It is usually used with multi-variant data rather than simply training data plus some testing data. If used on the data collected it would be assuming our training data was a random walk, which is not helpful considering the cyclic nature of an motor. SVMs are most useful for binary classification, ie. determining whether a tumour is malignant of benign. It is also very good for detecting seasonality in a data set, but was not applicable to the task at hand given the lack of multi-variance in our data.
 
-An ARIMA model of anomaly detection was also considered. The ARIMA model is 
+An ARIMA (autoregressive integrated moving average) model of anomaly detection was also considered. The ARIMA model is based off an auto-regressive moving average designed with the ability to detect seasonality in data sets, but works on the implication that the data supplied to the model is also ARIMA \cite{wei1994time}. The model was far too computationally sensitive and given the time constraints it was not possible to construct code to improve it to the quality of the other methods finally used which are better at detecting anomalous results. Given more time the ARIMA model would have been a good addition to the other methods of anomaly detection to confirm the reliability of our other methods.
+
+Least squares and histogram methods are also rejected from the data anlysis. Despite the advantage of being computationally simple and quick to run, the tests provided no contrasting information and provided no significant competitiveness to the other methods finally used. No data points were detected by least squares or histogram tests that were not also detected by one of the final methods, contributing very little to our analysis.
