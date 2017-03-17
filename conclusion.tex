@@ -1,22 +1,51 @@
 \section{Conclusion}
 \label{sec:conclusion}
 
-% days of manually constructing features from data are almost over. The machines will win
-\subsection{Applicability of Anomaly Detection Methods}
-
 \subsection{Experimental extensions }
 
-It would be of interest to expand upon the work done overloading an ungeared motor, specifically applying a rotary encoder and an ammeter. This was the initial plan, however the experimental set up rapidly became overcomplicated, meaning it was impractical to take both contact microphone data and rotary encoder data. The revolution speed given by the rotary encoder, coupled with an ammeter in series with the motor, would allow insight into how the speed of the shaft varies with the current drawn and the corresponding vibrations produced. This could reveal more about slipping produced during load application and any momentary losses of power due to this. 
+It would be of interest to expand upon the work done overloading Motor A, specifically applying a rotary encoder and an ammeter. This was the initial plan, however the experimental set up rapidly became overcomplicated, meaning it was impractical to take both contact microphone data and rotary encoder data. The revolution speed given by the rotary encoder, coupled with an ammeter in series with the motor, would allow insight into how the speed of the shaft varies with the current drawn and the corresponding vibrations produced. This could reveal more about slipping produced during load application and any momentary losses of power due to this. 
 
 
 %add here about power supply limitations at load in water
+Also when investigating Motor A in the overloading experiment, it would have been useful to have had access to a power supply that could produce a greater current. This would have allowed us to run the experiment at the correct voltage of 12 V, with any anomalies then solely down to the load added.
 
 
+\subsection{Applicability of Anomaly Detection Methods}
+
+The anomaly detection methods used for this investigation exhibited a range of practicality. For example, K-means provided an accurate indication of anomaly indices across most of the recorded data sets. Coupled with the statistical methods flagging up anomalies at a similar time, this provided reliability to the K-means method.
+
+Given more time, models such as the ARIMA model would have been a useful tool to observe the data and see if this returns an improved anomaly detection than those used. An improvement on the less accurate statistical methods could also be performed to increase the reliability of the more accurate models if they both flag anomalies at the same time.
+
+However, it has proved useful to have less accurate methods such as the standard deviation from moving average test to run the data through, as this displayed how significantly superior certain methods were.
+
+Throughout the course of our analyses, our anomaly detections were applied solely to the x axis - where the vibration sensor was placed parallel to the motor shaft. When an anomaly manifests itself in the form of vibrations, there will be differences in the time series data recorded in the y and z axes compared to the x axis.
+
+One idea for future work would include a coupled analysis of the vibrations in every axis simultaneously. Looking at multivariate data in this way could allow one to detect anomalies much earlier in time than univariate time series.
+
+Various failure modes could be investigated in order to obtain data in which anomalies are detected in one axis but not the others. An investigation into the possible reasons as to why this is the case would be of great interest.
+
+%using k means in frequency space. will help with analysis. things will always manifest themselves in f space. hard to autonomously track this with gaussian method. a more robust yet computation intensive method would be to use k means to reconstruct the waveform of a healthy motor and then create a recon error if it deviates from the spectrum
+
+In all motor failure modes, there was some observable change in the Fourier domain, however this was mainly limited to visual inspection and the only autonomous aspect was fitting a Gaussian curve to the most prominent peak. While it is useful to fit a Gaussian to the most prominent peak in the Fourier spectrum, there are numerous signatures contained in the remainder of the spectrum. These signatures contain just as useful indicators to anomalous as that of the prominent peak. Therefore, multiple Gaussian fitting is a procedure that could prove very useful for analysis in the frequency domain.
+
+With more computing time, an interesting topic for investigation would be the application of K-means clustering to the Fourier domain. Although in the time domain, K-means proved to be the most effective test at detecting anomalies, there were still some cases such as the motor overheating where no anomaly detecting methods in the time domain detected anything. K-means in the Fourier domain would involve taking hours of baseline motor data, splitting this into segments of a few seconds in length, applying FFTs to these segments to create Fourier spectra, and using these spectra to create a synthetic library of spectra. These can then be compared to Fourier spectra determined from testing data, and if the reconstruction error is above a certain threshold, this is flagged as anomalous behaviour.
+
+
+% 
+In conclusion, it was clear during the course of this investigation that the days of manually identifying novelties and anomalous features from time series data are coming to a close. In an age of big data analysis and significant computer parallisation - increasingly advanced techniques that employ machine learning are becoming continuously more prominent. 
+
+Some of the most advanced methods detailed in this report include that of K-means and an LSTM neural network. Given correct threshold and correct training data given the context of the motor use, these methods consistently identify anomalous with few false positives. These methods have been more sensitive than other methods, as well as accurately detecting the anomalies much earlier in time.
+
+Taking all of this into account, it becomes increasingly clear that the machines will win, or if not have already won. These `black box' methods have a degree of reliability and accuracy that remain unparallelled and no method that isn't of a machine learning nature has, as of yet, managed to compete with them.
+
+%\begin{verbatim}
+%    ``People worry that computers will get too smart and take over the world, but the real problem is that they're too stupid and they've already taken over the world.'' -Pedro Domingos
+%\end{verbatim}
 
 \addcontentsline{toc}{section}{Acknowledgements}
 \section*{Acknowledgements}
 
-\small We thank Dr. Chris Saunter, our consultant for this project. We also thank Prof. Paula Chadwick for the Team Project Module. Many thanks to Owen Jones and Carl Tipton from Tracerco who are reponsible for this project idea. We are grateful for the help of the Physics department technicians, Paul Foley and Ryan Ellison.
+\small We would like to thank Dr. Chris Saunter, our consultant for this project. We also thank Prof. Paula Chadwick for the Team Project Module. Many thanks to Owen Jones and Carl Tipton from TracerCo who are responsible for this project idea. We are also grateful for the help of the Physics department technicians, Paul Foley and Ryan Ellison.
 
 
 
