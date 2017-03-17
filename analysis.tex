@@ -5,9 +5,9 @@ In this analysis, we introduce and describe each investigated failure mode of a 
 
 Our analyses using anomaly detection methods were achieved by applying a range of tests onto a set of data. This includes the statistical tests described in \S\ref{subsec:statistical}, as well as more advanced methods such as K-means.
 
-For anomaly detection methods to highlight the presence of an anomaly, we defined various thresholds for each tests such that if this threshold was exceeded, an anomaly was detected. These thresholds were determined by applying each test to data of a normal motor, and adjusting the threshold value such that the number of anomalies were minimised. This technique served to set thresholds for each tests so that the effects of false positives were minimised, and inter-test comparisons become possible.
+For anomaly detection methods to highlight the presence of an anomaly, we defined various thresholds for each tests such that if this threshold was exceeded, an anomaly was detected. These thresholds were determined by applying each test to data of a normal motor operating under optimum conditions, and adjusting the threshold value such that the number of anomalies detected by the tests were minimised. This technique served to set thresholds for each test so that the effects of false positives were minimised, and inter-test comparisons become possible.
 
-Anomaly test plots featured later in this analysis highlight the presence of anomaly detections at points in the time series data being investigated. It is important to note that all analysis was performed on x-axis sensor data - where the sensor was applied parallel to the shaft of the motor.
+Anomaly test plots featured later in this analysis highlight the presence of anomaly detections at points in the time series data being investigated. It is important to note that all analysis was performed on x-axis sensor data - where the sensor was applied parallel to the shaft of the motor. The reason for the x axis being selected for analysis was that the most substantial changes were observed in the x and y axes of the motors, and the x axis was then arbitrarily chosen from the two. 
 
 \subsection{Motor Components and Setup}
 
@@ -188,7 +188,7 @@ x & $27.2 \newline \pm 0.8$ & $61 \newline \pm 6$      & $8.1 \newline \pm 0.5$ 
 y & $27.6 \newline \pm 0.8$ & $52.3 \newline \pm 0.5 $ & $8.5 \newline \pm 0.5$ & $49 \newline \pm 4$    & $320 \newline \pm 4$  & $6.2 \newline \pm 0.2$ & $4 \newline \pm 3$         & $680 \newline \pm 20$ & $10 \newline \pm 1$ \\
 z & $8.3 \newline \pm 0.3$  & $673 \newline \pm 33$    & $6.6 \newline \pm 0.2$ & $13 \newline \pm 13$   & $1172 \newline \pm 5$ & $100 \newline \pm 90$  & $0.069 \newline \pm 0.007$ & $703 \newline \pm 5$  & $12 \newline \pm 2$ \\ \hline
 \end{tabular}
-\caption[Gaussian Fit Parameters for Overheating]{Gaussian fit parameters for the most prominent peak in the Fourier spectrum, in the x, y and z axes of the motor. Parameters are returned for a baseline run, after one of the coils was placed on a hotplate, and when one of the coils was completely snipped. The units of $A$ are $10^{-3}$V$^2$ H$^{-1}$ and the units of $\mu$ and $\sigma$ are Hz.}
+\caption[Gaussian Fit Parameters for Overheating]{Gaussian fit parameters for the most prominent peak in the Fourier spectrum, in the x, y and z axes of the motor. Parameters are returned for a baseline run, after one of the coils was placed on a hotplate, and when one of the coils was completely snipped. The units of $A$ are $10^{-3}$V$^2$ Hz$^{-1}$ and the units of $\mu$ and $\sigma$ are Hz.}
 \label{table:overheating_table}
 \end{table}
 
@@ -199,6 +199,8 @@ The parameters returned from Gaussian fitting all significantly change after the
 The parameters returned from when the overheated motor then had one of its windings snipped changed even further. The fact that the parameters changed between the overheated motor and snipping the windings suggests that overheating the motor did not have a completely debilitating effect on that particular effected winding.
 
 As the Gaussian parameters for the baseline run are not in agreement within their errors with those for the overheated motor, this shows the effectiveness of Gaussian fitting method in detecting anomalous motor behaviour. 
+
+The parameters for the Gaussian curve fit onto the z axis spectrum for the hotplate run shows there was no prominent peak, with the amplitude being returned as $13 \pm 13$ $\times 10^{-3}$ V$^2$ Hz$^{-1}$. This indicates that the peak amplitude changed significantly over time. However, the fact that a consistent Gaussian could not be fit still indicates that the motor is behaving differently than it would under optimum conditions. This shows that the Gaussian fitting method can be used in an additional way for detecting anomalous behaviour: if the peak varies over time, returning a large error on a value parameter, this could be a sign the motor is no longer operating under optimum conditions.
 
 \subsection{Overvoltage and Undervoltage}
 
@@ -263,6 +265,8 @@ Each index within the data on which anomalous results are flagged up seem to be 
 %NEED TO TALK ABOUT OVERVOLTAGE HERE
 %Apparently motor voltage fluctuated as motor got hot. This very nicely shows how amplitude gradually increases towards end, and is found by the majority of time domain anomaly detection methods. 
 Figure.~\ref{fig:largemotor_30V} displays the effects of running the motor far above the optimum voltage of 12V. The voltage fluctuated toward the end of the testing data due to overheating of the motor, but was originally set at 30 V. It clearly shows anomalous data corresponding with the heating of the motor as a direct result of over-voltage. Most time domain anomaly detection methods flagged these results with K-means test detecting both before and after the Five Sigma test. This shows a clear advantage of using the K-means test as if the motor was switched off immediately as the first few anomalies were detected by the K-means test, the motor would not continue to operate at such high temperatures and fluctuating voltages which would potentially damage the motor.
+
+Analysis of the Fourier spectra in all 3 axes also showed clear changes to the motor's peak frequency. For example, the Gaussian fit to the most prominent peak in the y axis returned values for peak centres of $57.3 \pm 0.4$ Hz, $92.4 \pm 0.4$ Hz and $136.6 \pm 0.6$ Hz for the motor running under voltages of 12 V, 20 V and 30 V, respectively. This agrees with the expected behaviour when the voltage increases, with the motor rotation speed increasing and therefore its peak frequency becoming higher.
 
 \subsection{Load}
 
@@ -477,7 +481,6 @@ However, a failing of K-means method is also shown in Figure.~\ref{fig:large_une
     \label{soft_footing}
 \end{figure*}
 
-\vspace{20ex} %WATCH OUT THIS FORCES A MAGICAL PAGE BREAK
 Following a loosening of the clamp stands on which the motor was running, a significant increase in power over all frequencies was detected. Very obvious harmonics are visible in Figure.~\ref{soft_footing} which are possibly associated with the fundamental frequency of the clamp stand. The peaks displayed on the $x$ and $y$ axes between 600 and 800 Hz are very pronounced, however, the peak on the $z$ axis lacks the same definition. This could be attributed to the motor having its movement more constricted along the $z$ axis. The increase in overall power across the frequencies makes physical sense due to the motor coming into and out of contact with the clamp at many different locations and times during the cycle.
 
 %very obvious harmonics appearing, probably induced by motor being able to move more freely - might be harmonics associated with the fundamental frequency of the clamp stand. Peak between 600 and 800 Hz in x and y axis but not in z - why? Overall power over all frequencies much higher in general.
@@ -498,7 +501,7 @@ For testing purposes, to ensure that the various anomaly detection algorithms pe
 
 The detection of the obvious anomalous data by K-means, five sigma and median absolute deviation in Figure.~\ref{fig:spec_anom1} exhibits reliability in these particular methods. A point to note however is that K-means did not detect any anomalies as the voltage increases toward the end of the data set. This could be resolved by looking at the data within the Fourier domain to check if the anomaly detection methods including K-means detected the anomalies. 
 
-Also, standard deviation from moving average did not manage to detect all of the obvious signs of anomalous data but did flag up the increasing voltage toward the end of the data. This shows a definitive advantage of using more than one anomaly detection method at once - that is to ensure that no single method misses an anomaly and the engine is damaged as a result.
+Also, standard deviation from moving average did not manage to detect all of the obvious signs of anomalous data but did flag up the increasing voltage toward the end of the data. This shows a definitive advantage of using more than one anomaly detection method at once - that is to ensure that no single method misses an anomaly and the motor is damaged as a result.
 
 %Talk about reliability of methods in finding anomalies. K-means doesn't find the increasing voltage at the end - perhaps showing important of fourier spectra for certain cases. 
 

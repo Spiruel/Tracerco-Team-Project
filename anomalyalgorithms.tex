@@ -250,7 +250,7 @@ This method therefore identifies anomalous results by assigning probabilities of
 \subsection{K-Means Clustering}
 \label{subsec:kmeans}
 
-Cluster analysis involves combining data points into groups, or clusters, in such a way that the points in each cluster are more similar to each other than other points outside of the cluster. Any data points that do not belong to a cluster are defined as outliers. 
+Cluster analysis involves combining data points into groups, or clusters, in such a way that the points in each cluster are more similar to each other than other points outside of the cluster. Data points that are above a certain distance from any cluster centre can be classed as outliers.
 
 Figure.~\ref{fig:anomalies} in \S\ref{subsec:anomaly_detection} shows an example of clusters in 2 dimensions. 
 
@@ -300,7 +300,7 @@ Figure.~\ref{fig:kmeans_training} shows that all of the segments begin and end w
 The process creating a reconstruction of a waveform once the synthetic segments are obtained is as follows:
 
 \begin{enumerate}
-    \item Split the training waveform into segments of length $N_E$ (same length as before). Have the start each segment at 2 elements later than the previous one, to ensure a large overlap between segments.
+    \item Split the training waveform into segments of length $N_E$ (same length as before). Have the start of each segment at 2 elements later than the previous one, to ensure a large overlap between segments.
     \item From these segments, multiply each one by the sine windowing function and find the centroids in $N_E$-dimensional space ($N_E$ taken to be 24 as before) to create a library of $k$ synthetic segments. This functionality was provided by the \texttt{Python} package \texttt{sklearn}.
     \item Split the testing data (the data to reconstruct) into segments containing $N_E$ elements each. This time ensure that each segment overlaps by $N_E/2$ so that, for example, the first half of the second segment is taken from the same part of the waveform as the second half of the first segment.
     \item For each testing segment, find the synthetic segment that is the minimum Euclidean distance away in $N_E$-dimensional space, thus describing the closest fit. 
@@ -313,7 +313,7 @@ Note that this reconstruction can be of a waveform different to the waveform use
 
 \begin{figure}[t]
     \includegraphics[width=1.0\textwidth]{fig/kmeans2.pdf}
-    \caption[K mean clustering plot]{An example of the K-means reconstruction method. The original signal (top) is reconstructed (middle) from a library of synthetic segments, generated from a set of training data from a `healthy' motor. The reconstruction error (bottom) is the difference between the reconstructed and original signal.}
+    \caption[K-means clustering plot]{An example of the K-means reconstruction method. The original signal (top) is reconstructed (middle) from a library of synthetic segments, generated from a set of training data from a `healthy' motor. The reconstruction error (bottom) is the difference between the reconstructed and original signal.}
     \label{fig:kmeanerror}
 \end{figure}
 
